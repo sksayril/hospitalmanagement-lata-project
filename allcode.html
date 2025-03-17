@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Our Speciality Section */
+        /* Custom Styles for Specialities Section */
+        .line {
+        background-color: #274aab; /* Blue color for the line */
+        }
+
+        .lead{
+        font-size: 1rem; 
+        }
+
+        .content-boxes-v5 {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        align-items: center;
+        
+        }
+
+        .content-boxes-v5:hover {
+        transform: translateY(-10px); /* Lift the card on hover */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
+        }
+
+        .content-boxes-v5 .icon {
+        color: #999;
+        width: 50px;
+        height: 50px;
+        padding: 11px;
+        font-size: 10px;
+        background: #eee;
+        line-height: 28px;
+        text-align: center;
+        margin-right: 15px;
+        display: inline-block;
+        border-radius: 50%; /* Make icons circular */
+        transition: color 0.3s ease, background 0.3s ease; /* Smooth transition */
+        }
+
+        .content-boxes-v5:hover .icon {
+        color: #fff;
+        background: #134dd5; /* Blue background on hover */
+        }
+
+        .no-top-space {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+        .content-boxes-v5 {
+            margin-bottom: 20px; /* Add space between cards on smaller screens */
+        }
+        }
+        /* End Our Speciality Section */
+
+
+        /* Start Pricing Section Css*/
+        .pricingSection {
+            background-color: #f9f9f9;
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 60px; 
+            margin-bottom: 50px; 
+        }
+
+        /* Font style for h2 */
+        .headline-center h2 {
+        font-size: 28px;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 10px;
+        }
+
+        /* Line below h2 */
+        .headline-center .line {
+        width: 80px;
+        height: 4px;
+        background-color: #2166dd;
+        margin: 0 auto 50px auto;
+        border-radius: 5px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+        .headline-center h2 {
+            font-size: 24px; /* Slightly reduce size for tablets */
+        }
+        .headline-center .line {
+            width: 70px;
+        }
+        }
+
+        @media (max-width: 768px) {
+        .headline-center h2 {
+            font-size: 22px; /* Smaller font for mobile devices */
+        }
+        .headline-center .line {
+            width: 60px;
+        }
+        }
+
+        @media (max-width: 480px) {
+        .headline-center h2 {
+            font-size: 20px; /* Further reduce font for very small screens */
+        }
+        .headline-center .line {
+            width: 50px;
+        }
+        }
+
+        /* Add spacing between columns */
+        .pricingSection .box {
+        padding-top: 10px; /* Adds inner spacing for better layout */
+        }
+
+        /* Style for the "Show More" button */
+        #showMore {
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #2166dd;
+        border: 1px solid #fff;
+        border-radius: 50px;
+        color: #fff;
+        transition: all 0.5s ease;
+        cursor: pointer;
+        }
+
+        #showMore:hover {
+        border: 1px solid rgb(61, 180, 248);
+        box-shadow: 0px 0px 15px 5px rgba(40, 170, 200, 1);
+        }
+
+        /*---
+            Pricing
+        ---*/
+        .pricing-v9 {
+            border: 1px solid #929aa5;
+        }
+        .pricing-v9:hover {
+            box-shadow: 0 0 15px #322d2d;
+        }
+        .pricing-v9-head {
+            border-bottom: 1px solid #e4e7ea;
+        }
+        .pricing-v9-head h3 {
+            margin: 0;
+        }
+        .pricing-v9 ul {
+            margin: 0;
+        }
+        .pricing-v9 li {
+            margin-bottom: 5px;
+        }
+        .pricing-v9-price,
+        .pricing-v9-footer,
+        .pricing-v9 ul,
+        .pricing-v9-head {
+            padding: 20px 15px;
+        }
+        .pricing-v9-price,
+        .pricing-v9-footer {
+            border-top: 1px solid #e0e2e4;
+        }
+        .pricing-v9-price {
+            font-weight: 500;
+        }
+
+        .h3 {
+            text-transform: uppercase;
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+
+        .hover-effect {
+        transition: all 0.4s ease-in-out;
+        }
+
+        .g-color-default { color: #1350d5;}
+        .color-green { color: #1391d5;}
+        /* End Pricing Section Css*/
+
+
+        /* Start Review */
+
+        .main-review{
+        padding: 2.5rem 7%;
+        width: 100%;
+        
+        }
+
+        .review-heading h2{
+        margin-bottom: 20px;
+        text-align: center;
+        }
+        .review-heading .line {
+        width: 80px;
+        height: 4px;
+        background-color: #2166dd;
+        margin: 0 auto 5px auto;
+        border-radius: 5px;
+        }
+
+        .review-inner-content{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4rem;
+        text-align: center;
+        padding: 4rem 0;
+        
+        }
+
+        .review-box{
+        flex: 1 1 300px;
+        padding: 1rem;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        border-radius: 0 50px 0 0;
+        border: 1px solid;
+        cursor: pointer;
+        transition: 1s;
+        }
+        .review-box:hover{
+
+        border-radius: 50px 0 0 0;
+        
+        }
+
+        /* .review-box img{
+        border-radius: 100%;
+        width: 100px;
+        transition: 1s;
+        }
+        .review-box:hover img{
+        transform: scale(1.1);
+        } */
+
+        .review-box p{
+        padding: 1rem 1rem;
+        padding-bottom: 2rem;
+        line-height: 2.5rem;
+        }
+
+        /*== End Review ==*/
+
+    </style>
+</head>
+<body>
+    <!-- Specialities -->
+    <div class="container py-5">
+        <!-- Headline Section -->
+        <div class="text-center mb-5">
+            <h2 class="display-8">Our Specialities</h2>
+            <div class="line mx-auto bg-primary" style="width: 50px; height: 3px;"></div>
+            <p class="lead mt-3">This all multi/super speciality hospital with state-of-the-art facilities & treatments at an affordable cost, encompassing wide spectrum of accurate diagnostics and elegant therapeutics created on the philosophical edifice of patient and ethical centricity ensuring humanistic dispensation.</p>
+        </div>
+    
+        <!-- Specialities Grid -->
+        <div class="row g-4">
+            <!-- Column 1 -->
+            <div class="col-md-4">
+                <div class="content-boxes-v5 card h-100 shadow-sm border-0 p-4">
+                        <img class="icon" src="img\medical\001.png">    
+                    <div class="overflow-h">
+                        <h3 class="no-top-space">24/7 Ambulance Support</h3>
+                        <p class="text-muted">24 Hours Ambulance Service, Emergency Ambulance Service Providers in India.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="content-boxes-v5 card h-100 shadow-sm border-0 p-4">
+                    <img class="icon" src="img\medical\002.png">
+                    <div class="overflow-h">
+                        <h3 class="no-top-space">LASIK Vision Correction Treatment</h3>
+                        <p class="text-muted">We have LASIK Vision treatment which is the latest in the world.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Column 2 -->
+            <div class="col-md-4">
+                <div class="content-boxes-v5 card h-100 shadow-sm border-0 p-4">
+                    <img class="icon" src="img\medical\003.png">
+                    <div class="overflow-h">
+                        <h3 class="no-top-space">Dedicated Stroke Centre</h3>
+                        <p class="text-muted">We specially have a dedicated stroke centre which is very handy in critical situations.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="content-boxes-v5 card h-100 shadow-sm border-0 p-4">
+                    <img class="icon" src="img\medical\004.png">
+                    <div class="overflow-h">
+                        <h3 class="no-top-space">17 State-of-the-art Operation Theatres</h3>
+                        <p class="text-muted">These Operation Theatres are full of the latest technologies and equipment.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Column 3 -->
+            <div class="col-md-4">
+                <div class="content-boxes-v5 card h-100 shadow-sm border-0 p-4">
+                    <img class="icon" src="img\medical\005.png">
+                    <div class="overflow-h">
+                        <h3 class="no-top-space">Joint Replacement Centre</h3>
+                        <p class="text-muted">We have a dedicated Joint Replacement Centre.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="content-boxes-v5 card h-100 shadow-sm border-0 p-4">
+                    <img class="icon" src="img\medical\006.png">
+                    <div class="overflow-h">
+                        <h3 class="no-top-space">2 Endoscopy Suites</h3>
+                        <p class="text-muted">2 Endoscopy Suites are equipped with the latest equipment and are very fast compared to others.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/end container-->
+    <!-- End Content Part -->
+
+    <!-- Plans Start -->
+    <section class="pricingSection">
+        <div class="container" style="margin-top: 20px;">
+            <div class="headline-center">
+                <h2>Health Packages</h2>
+                <div class="line"></div>
+                <div class="row">
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Basic Health Check Up</span></h3>
+                             </div>
+                            <ul style="list-style-type:none;">
+                                <li><b>Haematology :</b><span class="g-color-default">CBC,Blood Group & RH</span></li>
+                                <li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+                                <li><b>Special Test:</b><span class="g-color-default">ECG,Chest X-Ray</span></li>
+                                <li><b>Consultancy:</b><span class="g-color-default">General Physician</span></li>
+                                <li>&nbsp;</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                            <span class="g-color-default"><b>₹1000/-</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Pre Marital Male/Female</span></h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                            <li><b>Haematology :</b><span class="g-color-default">CBC,ESR,Urine RM</span></li>
+							<li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+							<li><b>Special Test:</b><span class="g-color-default">ECG,Chest X-Ray</span></li>
+							<li><b>Consultancy:</b><span class="g-color-default">General Physician,ENT</span></li>
+							<li>&nbsp;</li>
+							<li>&nbsp;</li>
+                        </ul>
+						<div class="pricing-v9-price">
+					    <span class="g-color-default"><b>₹5000/-</b></span> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Little Champs Package</span></h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                                <li><b>Haematology :</b><span class="g-color-default">CBC,Blood Group & RH</span></li>
+                                <li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+                                <li><b>Special Test:</b><span class="g-color-default">ECG,Chest X-Ray,PFT</span></li>
+                                <li><b>Consultancy:</b><span class="g-color-default">ENT,Dentist</span></li>
+                                <li>&nbsp;</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                                 <span class="g-color-default"><b>₹6000/-</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Advance Cardiac Package</span></h3>
+                                
+                            </div>
+                            <ul style="list-style-type:none;">
+                            <li><b>Haematology :</b><span class="g-color-default">CBC,Blood Group & RH</span></li>
+							<li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+							<li><b>Special Test:</b><span class="g-color-default">ECG,Chest X-Ray,PFT</span></li>
+							<li><b>Consultancy:</b><span class="g-color-default">ENT,Dentist</span></li>
+							<li>&nbsp;</li>
+							<li>&nbsp;</li>
+						</ul>
+						<div class="pricing-v9-price">
+							 <span class="g-color-default"><b>₹2000/-</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                </div>
+                <div class="row">
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Senior Citizen Package</span></h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                            <li><b>Haematology :</b><span class="g-color-default">CBC,ESR,Urine RM</span></li>
+							<li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+							<li><b>Additional Test:</b><span class="g-color-default">Creatinine clearance</span></li>
+							<li><b>Consultancy:</b><span class="g-color-default">Dietician</span></li>
+							<li><b>Lipid Profile:</b><span class="g-color-default">VLDL,LDL</span></li>
+							<li>&nbsp;</li>
+							<li>&nbsp;</li>
+						</ul>
+						<div class="pricing-v9-price">
+							 <span class="g-color-default"><b>₹4000/-</b></span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Executive Silver Package</span></h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                                <li><b>Haematology :</b><span class="g-color-default">CBC,Blood Group & RH</span></li>
+                                <li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+                                <li><b>Special Test:</b><span class="g-color-default">ECG,Chest X-Ray,PFT</span></li>
+                                <li><b>Consultancy:</b><span class="g-color-default">ENT,Dentist</span></li>
+                                <li>&nbsp;</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                                 <span class="g-color-default"><b>₹20000/-</b></span>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Executive platinum package</span></h3>
+                            </div>
+                           <ul style="list-style-type:none;">
+                               <li><b>Haematology :</b><span class="g-color-default">CBC,Blood Group & RH</span></li>
+                               <li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+                               <li><b>Special Test:</b><span class="g-color-default">ECG,Chest X-Ray</span></li>
+                               <li><b>Consultancy:</b><span class="g-color-default">General Physician</span></li>
+                               <li>&nbsp;</li>
+                               <li>&nbsp;</li>
+                           </ul>
+                           <div class="pricing-v9-price">
+                           <span class="g-color-default"><b>₹30000/-</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">Executive Gold Package</span></h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                            <li><b>Haematology :</b><span class="g-color-default">CBC,ESR,Urine RM</span></li>
+							<li><b>Diabetes Profile :</b><span class="g-color-default">Fasting Blood Sugar</span></li>
+							<li><b>Additional Test:</b><span class="g-color-default">Creatinine clearance</span></li>
+							<li><b>Consultancy:</b><span class="g-color-default">Dietician</span></li>
+							<li><b>Lipid Profile:</b><span class="g-color-default">VLDL,LDL</span></li>
+							<li>&nbsp;</li>
+							<li>&nbsp;</li>
+						</ul>
+						<div class="pricing-v9-price">
+							<span class="g-color-default"><b>₹20000/-</b></span>      
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">KIRAN</span> Basic wellness</h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                                <li>CBC</li>
+                                <li>Blood Group & RH</li>
+                                <li>Urine (Routine & Micro)</li>
+                                <li>&nbsp;</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                                For <span class="g-color-default">₹1500/-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">KIRAN</span> Gold Wellness</h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                                <li>CBC</li>
+                                <li>Blood Group & RH </li>
+                                <li>Urine (Routine & Micro)</li>
+                                <li>SGPT</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                                For <span class="g-color-default">₹3000/-</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">KIRAN</span> Happy Heart</h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                                <li>Lipid Profile </li>
+                                <li>ECG</li>
+                                <li>Chest X-RAY</li>
+                                <li>FBS</li>
+                                <li>Basic Wellness Included</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                                For <span class="g-color-default">₹4500/-</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                    <!-- Pricing Item -->
+                    <div class="col-md-3 col-xs-6 col-2xs-12 box ">
+                        <div style="border-radius: 10px;" class="pricing-v9 hover-effect">
+                            <div class="pricing-v9-head">
+                                <h3 class="h3"><span class="g-color-default">KIRAN</span> Platinum Wellness</h3>
+                            </div>
+                            <ul style="list-style-type:none;">
+                                <li>Basic Wellness Plan</li>
+                                <li>Lung Function Tests</li>
+                                <li>USG Abdomen</li>
+                                <li>Thyroid All Tests</li>
+                                <li>Lung Efficiency Tests</li>
+                            </ul>
+                            <div class="pricing-v9-price">
+                                For <span class="g-color-default">₹8000/-</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Pricing Item -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 text-center">
+            <div class="button">
+                <button id="showMore"><span>Show More</span></button>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script> -->
+
+    <script>
+        $(document).ready(function () {
+            // Initially hide all rows except the first one
+            $('.pricingSection .row').slice(1).hide();
+
+            // Show hidden rows when "Show More" is clicked
+            $('#showMore').click(function () {
+                $('.pricingSection .row:hidden').first().slideDown(); // Show one hidden row at a time
+                if ($('.pricingSection .row:hidden').length === 0) {
+                    $('#showMore').fadeOut('slow'); // Hide the button if no more rows are hidden
+                }
+            });
+        });
+    </script>
+    <!-- End PLANS -->
+
+    <!-- customer review -->
+   <div class="main-review">
+        <section> 
+            <div class="review-heading">
+                <h2>Our Customers Review</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="main-inner-review">
+
+                <div class="review-inner-content">
+
+                    <div class="review-box">
+                        <img src="images/pic1.png" alt="">
+
+                        <h2>Lara John</h2>  
+                        <p> ⭐⭐⭐⭐⭐</p>
+                        <div class="review-text">
+                            <p>Optio quod assumenda similique provident aliquid corrupti minima maxime tempore! Quas illo porro fuga consectetur repellat </p>
+                        </div>
+
+                    </div>
+
+                    <div class="review-box">
+                        <img src="images/pic2.png" alt="">
+
+                        <h2>Michael Smith</h2>
+                        <p> ⭐⭐⭐</p>
+                        <div class="review-text">
+                            <p>Optio quod assumenda similique provident aliquid corrupti minima maxime tempore! Quas illo porro fuga consectetur repellat</p>
+                        </div>
+
+                    </div>
+
+                    <div class="review-box">
+                        <img src="images/pic3.png" alt="">
+
+                        <h2>Sophia Lee</h2>
+                        <p> ⭐⭐⭐⭐</p>
+
+                        <div class="review-text">
+                            <p>Optio quod assumenda similique provident aliquid corrupti minima maxime tempore! Quas illo porro fuga consectetur repellat</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- customer review -->
+
+</body>
+</html>

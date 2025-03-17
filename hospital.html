@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitals - Healthcare Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <!-- Animation library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/hospital.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/footer.css">
+    
+    <style>
+        /* Enhanced styling for improved UI */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .parallax-1 {
+            background-image: url('img/bg/hospital-hero.jpg');
+            height: 400px;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .parallax-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 80%;
+        }
+        
+        .parallax-inner h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+        }
+        
+        .parallax-inner p {
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+        }
+        
+        .search-bar {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hospital-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hospital-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hospital-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            color: #1e88e5;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        
+        .filter-bar {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .nav-button {
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #1565c0;
+            transform: scale(1.05);
+        }
+        
+        .animated-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animated-btn:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .animated-btn:hover:after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .badge-rating {
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #2196f3;
+            color: white;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .badge-availability {
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #4caf50;
+            color: white;
+            display: inline-block;
+        }
+        
+        .facility-icon {
+            margin-right: 5px;
+            font-size: 16px;
+            color: #1e88e5;
+        }
+        
+        .section-heading {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .section-heading:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #1e88e5;
+        }
+        
+        /* Loading animation */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loader .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #1e88e5;
+        }
+        
+        /* Pagination styling */
+        .pagination {
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .page-link {
+            color: #1e88e5;
+            border-radius: 50%;
+            margin: 0 5px;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 24px;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #1e88e5;
+            border-color: #1e88e5;
+        }
+        
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        /* Featured hospitals section */
+        .featured-hospitals {
+            padding: 40px 0;
+        }
+        
+        .featured-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff9800;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        /* Tooltip styling */
+        .tooltip-inner {
+            background-color: #1e88e5;
+            padding: 8px 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand animate__animated animate__fadeIn" href="index.html">
+                <img src="img/logo/hms.png" width="160" height="50" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="hospital.html">Hospitals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="doctor.html">Doctors & Specialities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="department.html">Departments & Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                    <li id="registerOption" class="nav-item"><a class="nav-link" href="register.html">Registration</a></li>
+                    <button class="nav-button animated-btn" onclick="redirectToBooking()">Book Appointment</button>
+                </ul>
+                <li id="profileNav" class="nav-item" style="display: none;">
+                    <div id="profileContainer">
+                        <div id="profileLogo" class="profile-logo"></div>
+                        <span id="profileInitial" style="display: none;">U</span>
+                        <span id="dropdownArrow">▼</span>
+                    </div>
+                    <div id="profileDropdown" class="dropdown1">
+                        <a href="profile.html">Edit Profile</a>
+                        <a href="#">Help & Support</a>
+                        <a href="#" id="logout">Logout</a>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Parallax Effect -->
+    <section class="parallax-1">
+        <div class="parallax-inner">
+            <h1 class="animate__animated animate__fadeInDown">Find the Perfect Hospital</h1>
+            <p class="animate__animated animate__fadeInUp">Discover top-rated healthcare facilities near you</p>
+            <div class="search-bar animate__animated animate__fadeIn animate__delay-1s">
+                <div class="row g-2">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search hospitals by name...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            <input type="text" class="form-control" placeholder="Enter your location...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary w-100" id="searchBtn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mt-5">
+        <h2 class="section-heading animate__animated animate__fadeIn">Find the Best Hospitals</h2>
+        
+        <!-- Advanced Filter Bar -->
+        <div class="filter-bar mb-4 animate__animated animate__fadeIn animate__delay-1s">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="locationFilter" class="form-label"><i class="fas fa-map-marker-alt facility-icon"></i> Location</label>
+                    <select class="form-select" id="locationFilter">
+                        <option selected value="">All Locations</option>
+                        <option value="Katargam">Katargam</option>
+                        <option value="Piplod">Piplod</option>
+                        <option value="Kiran Motor">opp. Kiran Motor</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="ratingFilter" class="form-label"><i class="fas fa-star facility-icon"></i> Rating</label>
+                    <select class="form-select" id="ratingFilter">
+                        <option selected value="">All Ratings</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="specialtyFilter" class="form-label"><i class="fas fa-stethoscope facility-icon"></i> Specialty</label>
+                    <select class="form-select" id="specialtyFilter">
+                        <option selected value="">All Specialties</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="insuranceFilter" class="form-label"><i class="fas fa-heartbeat facility-icon"></i> Insurance</label>
+                    <select class="form-select" id="insuranceFilter">
+                        <option selected value="">All Types</option>
+                        <option value="Government">Government</option>
+                        <option value="Private">Private</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <button class="btn btn-primary w-100" id="filterBtn">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-outline-secondary btn-sm" id="clearFilters">
+                    <i class="fas fa-times"></i> Clear Filters
+                </button>
+                <div class="float-end">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary btn-sm active" id="gridView">
+                            <i class="fas fa-th-large"></i> Grid
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" id="listView">
+                            <i class="fas fa-list"></i> List
+                        </button>
+                    </div>
+                    <select class="form-select form-select-sm d-inline-block ms-2" style="width: 120px;" id="sortOptions">
+                        <option value="relevance">Relevance</option>
+                        <option value="rating">Rating</option>
+                        <option value="name">Name (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Active Filters Display -->
+        <div id="activeFilters" class="mb-3" style="display: none;">
+            <span class="badge bg-light text-dark me-2 p-2">All Filters: </span>
+            <span id="activeLocationFilter" class="badge bg-primary me-2 p-2" style="display: none;">
+                Location: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
+            </span>
+            <span id="activeRatingFilter" class="badge bg-primary me-2 p-2" style="display: none;">
+                Rating: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
+            </span>
+            <span id="activeSpecialtyFilter" class="badge bg-primary me-2 p-2" style="display: none;">
+                Specialty: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
+            </span>
+            <span id="activeInsuranceFilter" class="badge bg-primary me-2 p-2" style="display: none;">
+                Insurance: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
+            </span>
+        </div>
+        
+        <!-- Loading Indicator -->
+        <div class="loader" id="loader">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Finding the best hospitals for you...</p>
+        </div>
+        
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults">
+            <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+            <h4>No hospitals found</h4>
+            <p>Try adjusting your filters or search criteria</p>
+            <button class="btn btn-outline-primary mt-2" id="resetSearch">Reset Search</button>
+        </div>
+        
+        <!-- Hospital List - Grid View -->
+        <div class="row" id="hospitalList">
+            <!-- Hospital Card 1 -->
+            <div class="col-md-4 hospital-item animate__animated animate__fadeIn" data-location="Katargam" data-rating="5" data-specialty="Cardiology" data-insurance="Private">
+                <div class="card hospital-card">
+                    <div class="position-relative">
+                        <img src="img/bg/bgimg1.jpg" class="card-img-top" alt="Kiran Hospital">
+                        <span class="featured-badge">Featured</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Kiran Hospital</h5>
+                        <p class="card-text"><i class="fas fa-map-marker-alt facility-icon"></i> Vasta Devdi Rd, near Sumul Dairy Road, Tunki, Katargam, Surat, Gujarat 395004</p>
+                        <p><i class="fas fa-phone facility-icon"></i> 0261 716 1111</p>
+                        <div class="mb-3">
+                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 5.0</span>
+                            <span class="badge-availability"><i class="fas fa-clock"></i> 24/7 Emergency</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-heartbeat facility-icon"></i> Cardiology</span>
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-brain facility-icon"></i> Neurology</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-procedures facility-icon"></i> ICU</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="kiran.html" class="btn btn-outline-primary">View Details</a>
+                            <button class="btn btn-primary" onclick="bookAppointment('Kiran Hospital')">
+                                <i class="fas fa-calendar-check"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hospital Card 2 -->
+            <div class="col-md-4 hospital-item animate__animated animate__fadeIn" data-location="Piplod" data-rating="4" data-specialty="Neurology" data-insurance="Private">
+                <div class="card hospital-card">
+                    <img src="img/bg/sunshine1.jpg" class="card-img-top" alt="Sunshine Hospital">
+                    <div class="card-body">
+                        <h5 class="card-title">Sunshine Hospital</h5>
+                        <p class="card-text"><i class="fas fa-map-marker-alt facility-icon"></i> Dumas Rd, beside Big Bazar, Piplod, Surat, Gujarat 395007</p>
+                        <p><i class="fas fa-phone facility-icon"></i> 0261 411 1000</p>
+                        <div class="mb-3">
+                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 4.0</span>
+                            <span class="badge-availability"><i class="fas fa-clock"></i> 24/7 Emergency</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-brain facility-icon"></i> Neurology</span>
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-bone facility-icon"></i> Orthopedics</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-procedures facility-icon"></i> ICU</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="sunshine.html" class="btn btn-outline-primary">View Details</a>
+                            <button class="btn btn-primary" onclick="bookAppointment('Sunshine Hospital')">
+                                <i class="fas fa-calendar-check"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hospital Card 3 -->
+            <div class="col-md-4 hospital-item animate__animated animate__fadeIn" data-location="Kiran Motor" data-rating="4" data-specialty="Orthopedics" data-insurance="Government">
+                <div class="card hospital-card">
+                    <img src="img/bg/Unique.jpg" class="card-img-top" alt="Unique Hospital">
+                    <div class="card-body">
+                        <h5 class="card-title">Unique Hospital</h5>
+                        <p class="card-text"><i class="fas fa-map-marker-alt facility-icon"></i> Civil Hospital-Char Rasta Sosyo Circle, Vesu Canal Rd, opp. Kiran Motor, Surat</p>
+                        <p><i class="fas fa-phone facility-icon"></i> 0261 263 6318</p>
+                        <div class="mb-3">
+                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 4.0</span>
+                            <span class="badge-availability"><i class="fas fa-clock"></i> 24/7 Emergency</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-bone facility-icon"></i> Orthopedics</span>
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-baby facility-icon"></i> Pediatrics</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-procedures facility-icon"></i> ICU</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="unique.html" class="btn btn-outline-primary">View Details</a>
+                            <button class="btn btn-primary" onclick="bookAppointment('Unique Hospital')">
+                                <i class="fas fa-calendar-check"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Featured Hospitals Section with Carousel -->
+    <section class="featured-hospitals bg-light py-5 mt-5">
+        <div class="container">
+            <h2 class="featured-heading section-heading mb-4">Featured Hospitals</h2>
+            
+            <div class="owl-carousel owl-theme" id="featuredHospitals">
+                <div class="item">
+                    <div class="card hospital-card h-100">
+                        <img src="img/bg/bgimg1.jpg" class="card-img-top" alt="Kiran Hospital">
+                        <div class="card-body">
+                            <h5 class="card-title">Kiran Hospital</h5>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> Katargam, Surat</p>
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <span class="ms-2">(520 reviews)</span>
+                            </div>
+                            <p class="text-muted">Multi-specialty hospital with state-of-the-art facilities</p>
+                            <a href="kiran.html" class="btn btn-sm btn-outline-primary">View Hospital</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="card hospital-card h-100">
+                        <img src="img/bg/sunshine1.jpg" class="card-img-top" alt="Sunshine Hospital">
+                        <div class="card-body">
+                            <h5 class="card-title">Sunshine Hospital</h5>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> Piplod, Surat</p>
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                                <span class="ms-2">(410 reviews)</span>
+                            </div>
+                            <p class="text-muted">Premier healthcare facility with expert doctors</p>
+                            <a href="sunshine.html" class="btn btn-sm btn-outline-primary">View Hospital</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="card hospital-card h-100">
+                        <img src="img/bg/Unique.jpg" class="card-img-top" alt="Unique Hospital">
+                        <div class="card-body">
+                            <h5 class="card-title">Unique Hospital</h5>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> opp. Kiran Motor, Surat</p>
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="far fa-star text-warning"></i>
+                                <span class="ms-2">(320 reviews)</span>
+                            </div>
+                            <p class="text-muted">Renowned for orthopedic and pediatric care</p>
+                            <a href="unique.html" class="btn btn-sm btn-outline-primary">View Hospital</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="card hospital-card h-100">
+                        <img src="img/bg/hospital4.jpg" class="card-img-top" alt="SMIMER Hospital">
+                        <div class="card-body">
+                            <h5 class="card-title">SMIMER Hospital</h5>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> Umarwada, Surat</p>
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="far fa-star text-warning"></i>
+                                <span class="ms-2">(275 reviews)</span>
+                            </div>
+                            <p class="text-muted">Government hospital with affordable quality care</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View Hospital</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action Section -->
+    <section class="py-5 bg-primary text-white text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Need help finding the right hospital?</h2>
+                    <p class="lead mb-4">Our healthcare specialists are ready to assist you 24/7</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-phone-alt me-2"></i> Call Us
+                        </button>
+                        <button class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-comments me-2"></i> Live Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Tips Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-heading">Latest Health Tips</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="img/bg/health-tip1.jpg" class="card-img-top" alt="Health Tip 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Staying Hydrated: Why It Matters</h5>
+                            <p class="card-text">Learn about the importance of proper hydration for overall health and wellbeing.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="img/bg/health-tip2.jpg" class="card-img-top" alt="Health Tip 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Heart Health: Simple Daily Habits</h5>
+                            <p class="card-text">Discover easy ways to maintain heart health through simple lifestyle changes.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="img/bg/health-tip3.jpg" class="card-img-top" alt="Health Tip 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Mental Wellness: Stress Management</h5>
+                            <p class="card-text">Effective techniques to manage stress and improve mental wellbeing.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--=== Footer ===-->
+    <div class="footer-v1">
+        <div class="footer">
+            <div class="container1">
+                <div class="row">
+                    <!-- About -->
+                    <div class="col-md-3 md-margin-bottom-40">
+                        <a href="index.html"><img id="logo-footer" class="footer-logo" src="img/logo/hms.png" width="160" height="50" alt="Logo"></a>
+                        <p>We are convinced that 'quality' and 'lowest cost' are not mutually exclusive when it comes to healthcare delivery.</p>
+                        <p>Our mission is to deliver high quality, affordable healthcare services to the broader population in India.</p>
+                    </div><!--/col-md-3-->
+                    <!-- End About -->
+                    
+                    <!-- Link List -->
+                    <div class="col-md-3" style="margin-bottom: 40px;">
+                        <div class="headline"><h2>Useful Links</h2></div>
+                        <ul class="list-unstyled link-list">
+                            <li><a href="about.html">About us</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="contact.html">Contact us</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="book.html">Book Appointment</a><i class="fa fa-angle-right"></i></li>
+                        </ul>
+                    </div>
+                    <!-- End Link List -->
+                    
+                    <!-- Address -->
+                    <div class="col-md-3 map-img" style="margin-bottom: 40px;">
+                        <div class="headline"><h2>Contact Us</h2></div>
+                        <address class="md-margin-bottom-40">
+                            Multipal Hospital <br />
+                            Centre of Surat City, Gujarat <br />
+                            Phone: 886 666 00555 <br />
+                        </address>
+                    </div>
+                    <!-- End Address -->
+                    
+                    <!-- Newsletter Subscription -->
+                    <div class="col-md-3">
+                        <div class="headline"><h2>Stay Connected</h2></div>
+                        <form class="subscription-form">
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email">
+                                <button class="btn btn-primary" type="button">Subscribe</button>
+                            </div>
+                        </form>
+                        <ul class="social-icons list-inline">
+                            <li class="list-inline-item"><a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a></li>
+                            <li class="list-inline-item"><a href="#" class="social-icon"><i class="fab fa-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="#" class="social-icon"><i class="fab fa-instagram"></i></a></li>
+                            <li class="list-inline-item"><a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- End Newsletter Subscription -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>© 2025 HMS. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p>
+                            <a href="#">Privacy Policy</a> | 
+                            <a href="#">Terms of Service</a> | 
+                            <a href="#">Site Map</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Copyright -->
+    </div>
+    <!--=== End Footer ===-->
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top btn btn-primary rounded-circle" role="button">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Bootstrap Bundle and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Owl Carousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/header.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            
+            // Initialize Owl Carousel for featured hospitals
+            $("#featuredHospitals").owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                responsive: {
+                    0: { items: 1 },
+                    600: { items: 2 },
+                    1000: { items: 3 }
+                },
+                autoplay: true,
+                autoplayTimeout: 5000,
+                autoplayHoverPause: true,
+                navText: [
+                    "<i class='fas fa-chevron-left'></i>",
+                    "<i class='fas fa-chevron-right'></i>"
+                ]
+            });
+            
+            // Animated entrance for hospital cards
+            setTimeout(function() {
+                $('.hospital-item').addClass('animate__fadeIn');
+            }, 300);
+            
+            // Filter functionality
+            $("#filterBtn").click(function() {
+                simulateLoading();
+                
+                // Get filter values
+                const locationFilter = $("#locationFilter").val();
+                const ratingFilter = $("#ratingFilter").val();
+                const specialtyFilter = $("#specialtyFilter").val();
+                const insuranceFilter = $("#insuranceFilter").val();
+                
+                // Show active filters
+                if (locationFilter || ratingFilter || specialtyFilter || insuranceFilter) {
+                    $("#activeFilters").show();
+                } else {
+                    $("#activeFilters").hide();
+                }
+                
+                // Set active filter badges
+                if (locationFilter) {
+                    $("#activeLocationFilter").show().find(".filter-value").text(locationFilter);
+                } else {
+                    $("#activeLocationFilter").hide();
+                }
+                
+                if (ratingFilter) {
+                    $("#activeRatingFilter").show().find(".filter-value").text(ratingFilter + " Stars");
+                } else {
+                    $("#activeRatingFilter").hide();
+                }
+                
+                if (specialtyFilter) {
+                    $("#activeSpecialtyFilter").show().find(".filter-value").text(specialtyFilter);
+                } else {
+                    $("#activeSpecialtyFilter").hide();
+                }
+                
+                if (insuranceFilter) {
+                    $("#activeInsuranceFilter").show().find(".filter-value").text(insuranceFilter);
+                } else {
+                    $("#activeInsuranceFilter").hide();
+                }
+                
+                // Filter hospitals based on criteria
+                $(".hospital-item").each(function() {
+                    let show = true;
+                    
+                    if (locationFilter && $(this).data("location") !== locationFilter) {
+                        show = false;
+                    }
+                    
+                    if (ratingFilter && $(this).data("rating") !== parseInt(ratingFilter)) {
+                        show = false;
+                    }
+                    
+                    if (specialtyFilter && $(this).data("specialty") !== specialtyFilter) {
+                        show = false;
+                    }
+                    
+                    if (insuranceFilter && $(this).data("insurance") !== insuranceFilter) {
+                        show = false;
+                    }
+                    
+                    if (show) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                
+                // Check if any hospitals are visible
+                setTimeout(function() {
+                    if ($(".hospital-item:visible").length === 0) {
+                        $("#noResults").show();
+                    } else {
+                        $("#noResults").hide();
+                    }
+                }, 1000);
+            });
+            
+            // Clear filters
+            $("#clearFilters, #resetSearch").click(function() {
+                simulateLoading();
+                
+                // Reset filter selects
+                $("#locationFilter").val("");
+                $("#ratingFilter").val("");
+                $("#specialtyFilter").val("");
+                $("#insuranceFilter").val("");
+                
+                // Hide active filters
+                $("#activeFilters").hide();
+                
+                // Show all hospitals
+                $(".hospital-item").show();
+                $("#noResults").hide();
+            });
+            
+            // Search functionality
+            $("#searchBtn").click(function() {
+                simulateLoading();
+                
+                const searchTerm = $("#searchInput").val().toLowerCase();
+                if (searchTerm) {
+                    $(".hospital-item").each(function() {
+                        const hospitalName = $(this).find(".card-title").text().toLowerCase();
+                        const hospitalAddress = $(this).find(".card-text").text().toLowerCase();
+                        
+                        if (hospitalName.includes(searchTerm) || hospitalAddress.includes(searchTerm)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                    
+                    // Check if any hospitals are visible
+                    setTimeout(function() {
+                        if ($(".hospital-item:visible").length === 0) {
+                            $("#noResults").show();
+                        } else {
+                            $("#noResults").hide();
+                        }
+                    }, 1000);
+                } else {
+                    $(".hospital-item").show();
+                    $("#noResults").hide();
+                }
+            });
+            
+            // Remove individual filters when clicking on the X
+            $("#activeLocationFilter .fa-times").click(function() {
+                $("#locationFilter").val("");
+                $("#activeLocationFilter").hide();
+                applyFilters();
+            });
+            
+            $("#activeRatingFilter .fa-times").click(function() {
+                $("#ratingFilter").val("");
+                $("#activeRatingFilter").hide();
+                applyFilters();
+            });
+            
+            $("#activeSpecialtyFilter .fa-times").click(function() {
+                $("#specialtyFilter").val("");
+                $("#activeSpecialtyFilter").hide();
+                applyFilters();
+            });
+            
+            $("#activeInsuranceFilter .fa-times").click(function() {
+                $("#insuranceFilter").val("");
+                $("#activeInsuranceFilter").hide();
+                applyFilters();
+            });
+            
+            // Toggle between grid and list view
+            $("#gridView").click(function() {
+                $(this).addClass("active");
+                $("#listView").removeClass("active");
+                $(".hospital-item").removeClass("col-md-12").addClass("col-md-4");
+            });
+            
+            $("#listView").click(function() {
+                $(this).addClass("active");
+                $("#gridView").removeClass("active");
+                $(".hospital-item").removeClass("col-md-4").addClass("col-md-12");
+            });
+            
+            // Book appointment functionality
+            window.bookAppointment = function(hospitalName) {
+                alert("Booking appointment at " + hospitalName + ". Redirecting to appointment page...");
+                // Redirect to booking page
+                // window.location.href = "book.html?hospital=" + encodeURIComponent(hospitalName);
+            };
+            
+            // Function to simulate loading
+            function simulateLoading() {
+                // Hide content and show loader
+                $("#hospitalList").hide();
+                $("#loader").show();
+                
+                // After timeout, hide loader and show content
+                setTimeout(function() {
+                    $("#loader").hide();
+                    $("#hospitalList").show();
+                }, 1000);
+            }
+            
+            // Function to apply filters (used by individual filter removal)
+            function applyFilters() {
+                $("#filterBtn").click();
+            }
+            
+            // Sort functionality
+            $("#sortOptions").change(function() {
+                const sortBy = $(this).val();
+                
+                if (sortBy === "rating") {
+                    // Sort by rating (highest first)
+                    const items = $(".hospital-item").get();
+                    items.sort(function(a, b) {
+                        const ratingA = $(a).data("rating");
+                        const ratingB = $(b).data("rating");
+                        return ratingB - ratingA;
+                    });
+                    $("#hospitalList").append(items);
+                } else if (sortBy === "name") {
+                    // Sort by name (A-Z)
+                    const items = $(".hospital-item").get();
+                    items.sort(function(a, b) {
+                        const nameA = $(a).find(".card-title").text().toLowerCase();
+                        const nameB = $(b).find(".card-title").text().toLowerCase();
+                        if (nameA < nameB) return -1;
+                        if (nameA > nameB) return 1;
+                        return 0;
+                    });
+                    $("#hospitalList").append(items);
+                } else {
+                    // Sort by relevance (default order)
+                    const items = $(".hospital-item").get();
+                    items.sort(function(a, b) {
+                        return $(a).index() - $(b).index();
+                    });
+                    $("#hospitalList").append(items);
+                }
+            });
+            
+            // Back to top button functionality
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 300) {
+                    $('.back-to-top').fadeIn();
+                } else {
+                    $('.back-to-top').fadeOut();
+                }
+            });
+            
+            $('.back-to-top').click(function(e) {
+                e.preventDefault();
+                $('html, body').animate({scrollTop: 0}, 800);
+                return false;
+            });
+            
+            // Redirect to booking page
+            window.redirectToBooking = function() {
+                window.location.href = "book.html";
+            };
+        });
+    </script>
+</body>
+</html>

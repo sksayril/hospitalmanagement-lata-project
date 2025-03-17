@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+     <!-- Custom CSS -->
+     <link rel="stylesheet" href="css\header.css">
+     <link rel="stylesheet" href="css\doctor.css">
+     <link rel="stylesheet" href="css\department.css">
+     <link rel="stylesheet" href="css\profile.css">
+     <link rel="stylesheet" href="css\footer.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .booking-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="img\logo\hms.png" width="160" height="50" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="hospital.html">Hospitals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="doctor.html">Doctors & Specialities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="department.html">Departments & Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                    <li id="registerOption" class="nav-item"><a class="nav-link" href="register.html">Registration</a></li>
+                    <button class="nav-button animated-btn" onclick="redirectToBooking()">Book Appointment</button>
+                   
+                </ul>
+                <li id="profileNav" class="nav-item" style="display: none;">
+                    <div id="profileContainer">
+                        <div id="profileLogo" class="profile-logo"></div>
+                        <span id="profileInitial" style="display: none;">U</span>
+                        <span id="dropdownArrow">▼</span>
+                    </div>
+                    <div id="profileDropdown" class="dropdown1">
+                        <a href="profile.html">Edit Profile</a>
+                        <a href="#">Help & Support</a>
+                        <a href="#" id="logout">Logout</a>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Book an Appointment</h2>
+    
+        <div class="col-lg-6 mx-auto">
+            <div class="booking-form">
+                <form id="appointmentForm">
+                    <!-- Doctor & Hospital Details -->
+                    <h5 class="mb-3">Doctor & Hospital Details</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Doctor Name</label>
+                        <input type="text" class="form-control" id="doctorName" value="" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Specialty</label>
+                        <input type="text" class="form-control" id="specialty" value="" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hospital Name</label>
+                        <input type="text" class="form-control" id="hospitalName" value="" readonly>
+                    </div>
+
+                    <!-- Patient Information -->
+                    <h5 class="mt-4 mb-3">Patient Information</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact Number</label>
+                        <input type="tel" class="form-control" id="contactNumber" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <div>
+                            <input type="radio" name="gender" value="Male" required> Male
+                            <input type="radio" name="gender" value="Female"> Female
+                            <input type="radio" name="gender" value="Other"> Other
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <h5 class="mt-4 mb-3">Appointment Details</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Preferred Date & Time</label>
+                        <input type="datetime-local" class="form-control" id="appointmentDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Reason for Appointment</label>
+                        <textarea class="form-control" id="reason" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Urgency Level</label>
+                        <select class="form-select" id="urgency" required>
+                            <option value="">Select</option>
+                            <option value="Routine">Routine</option>
+                            <option value="Urgent">Urgent</option>
+                            <option value="Emergency">Emergency</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Insurance Provider</label>
+                        <input type="text" class="form-control" id="insuranceProvider">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+                </form>
+
+                <!-- Success Message -->
+                <div class="success-message mt-3">
+                    ✅ Your appointment has been booked successfully!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#appointmentForm").submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+
+                // Form validation
+                if ($("#fullName").val() === "" || $("#contactNumber").val() === "" || $("#email").val() === "" || $("#appointmentDate").val() === "" || $("#urgency").val() === "" || !$("#terms").is(":checked")) {
+                    alert("Please fill out all required fields.");
+                    return;
+                }
+
+                // Show success message
+                $(".success-message").fadeIn();
+
+                // Reset form after 3 seconds
+                setTimeout(function() {
+                    $("#appointmentForm")[0].reset();
+                    $(".success-message").fadeOut();
+                }, 3000);
+            });
+        });
+    </script>
+
+    <!--=== Footer ===-->
+    <div class="footer-v1">
+        <div class="footer">
+            <div class="container1">
+                <div class="row">
+                    <!-- About -->
+                    <div class="col-md-3 md-margin-bottom-40">
+                        <a href="index.html"><img id="logo-footer" class="footer-logo" src="img\logo\hms.png" width="160" height="50" alt="Logo" alt=""></a>
+                        <p>We are convinced that 'quality' and 'lowest cost' are not mutually exclusive when it comes to healthcare delivery.</p>
+                        <p>Our mission is to deliver high quality, affordable healthcare services to the broader population in India.</p>
+                    </div><!--/col-md-3-->
+                    <!-- End About -->
+                      <!-- Link List -->
+                    <div class="col-md-3" style="margin-bottom: 40px;">
+                        <div class="headline"><h2>Useful Links</h2></div>
+                        <ul class="list-unstyled link-list">
+                            <li><a href="about.html">About us</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="contact.html">Contact us</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="book.html">Book Appointment</a><i class="fa fa-angle-right"></i></li>
+                        </ul>
+                    </div><!--/col-md-3-->
+                    <!-- End Link List -->
+
+                    <!-- Address -->
+                    <div class="col-md-3 map-img" style="margin-bottom: 40px;">
+                        <div class="headline"><h2>Contact Us</h2></div>
+                        <address class="md-margin-bottom-40">
+                            Multipal Hospital <br />
+                            Centre of Surat City, Gujarat <br />
+                            Phone: 886 666 00555 <br />
+                            </address>
+                    </div><!--/col-md-3-->
+                    <!-- End Address -->
+                </div>
+            </div>
+        </div><!--/footer-->
+        <!-- Social Links -->
+                    <!-- <div class="col-md-6">
+                        <ul class="footer-socials list-inline">
+                            <li>
+                                <a href="http://www.facebook.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.skype.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype">
+                                    <i class="fa fa-skype"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.googleplus.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Google Plus">
+                                    <i class="fa fa-google-plus"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.linkedin.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Linkedin">
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.Pinterest.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinterest">
+                                    <i class="fa fa-pinterest"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.twitter.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div> -->
+                    <!-- End Social Links -->
+                </div>
+            </div>
+        </div><!--/copyright-->
+    </div>
+    <!--=== End Footer ===-->
+
+    <!-- Bootstrap JS and jQuery -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+    <script src="js/header.js"></script>
+</body>
+</html>

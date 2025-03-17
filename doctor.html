@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Doctor - Interactive Search</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        /* Custom CSS for enhanced interactivity */
+        .parallax-1 {
+            background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            height: 300px;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .parallax-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 80%;
+        }
+        
+        .parallax-inner h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .doctor-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            margin-bottom: 20px;
+            height: 100%;
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .doctor-card img {
+            object-fit: cover;
+            height: 250px;
+        }
+        
+        .search-bar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .animated-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+        
+        .animated-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+        
+        .animated-btn:hover:before {
+            left: 100%;
+        }
+        
+        .rating {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+        
+        .filter-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            margin: 5px;
+            background: #e9ecef;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-tag:hover, .filter-tag.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .availability-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .available {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .busy {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .doctor-modal .modal-body {
+            padding: 30px;
+        }
+        
+        .doctor-stats {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            flex: 1;
+            margin: 0 5px;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        /* Custom animation for doctors loading */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .parallax-inner h1 {
+                font-size: 2.5rem;
+            }
+            
+            .doctor-stats {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar (same as original) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo/hms.png" width="160" height="50" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="hospital.html">Hospitals</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="doctor.html">Doctors & Specialities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="department.html">Departments & Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                    <li id="registerOption" class="nav-item"><a class="nav-link" href="register.html">Registration</a></li>
+                    <button class="nav-button animated-btn btn btn-primary" onclick="redirectToBooking()">Book Appointment</button>
+                </ul>
+                <li id="profileNav" class="nav-item" style="display: none; list-style: none;">
+                    <div id="profileContainer">
+                        <div id="profileLogo" class="profile-logo"></div>
+                        <span id="profileInitial" style="display: none;">U</span>
+                        <span id="dropdownArrow">▼</span>
+                    </div>
+                    <div id="profileDropdown" class="dropdown1">
+                        <a href="profile.html">Edit Profile</a>
+                        <a href="#">Help & Support</a>
+                        <a href="#" id="logout">Logout</a>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Parallax -->
+    <section class="parallax-1">
+        <div class="parallax-inner">
+            <h1>Find Your Doctor</h1>
+            <p class="lead text-white">Discover the right healthcare professional for your needs</p>
+        </div>
+    </section>
+
+    <div class="container mt-4">
+        <!-- Enhanced Search Section -->
+        <div class="search-bar mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="doctorNameSearch" placeholder="Search doctor name">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="specialtyFilter">
+                        <option value="">All Specialties</option>
+                        <option value="cardiology">Cardiologist</option>
+                        <option value="neurology">Neurologist</option>
+                        <option value="plastic-surgery">Plastic Surgery</option>
+                        <option value="physician">Physician</option>
+                        <option value="neuro-surgeon">Neuro Surgeon</option>
+                        <option value="plastic-reconstruction">Plastic & Reconstruction</option>
+                        <option value="oncophysician">Oncophysician</option>
+                        <option value="onco-surgeon">Onco Surgeon</option>
+                        <option value="ent">ENT Surgery</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="hospitalFilter">
+                        <option value="">All Hospitals</option>
+                        <option value="kiran">Kiran Hospital</option>
+                        <option value="unique">Unique Hospital</option>
+                        <option value="sunshine">Sunshine Hospital</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" id="searchBtn"><i class="fas fa-filter me-2"></i>Filter</button>
+                </div>
+            </div>
+            
+            <!-- Quick filters -->
+            <div class="mt-3">
+                <div class="d-flex align-items-center">
+                    <span class="me-2">Quick filters:</span>
+                    <div class="filter-tag" data-filter="experience">Most Experienced</div>
+                    <div class="filter-tag" data-filter="available">Available Today</div>
+                    <div class="filter-tag" data-filter="rating">Highest Rated</div>
+                </div>
+            </div>
+            
+            <!-- Active filters display -->
+            <div class="mt-3" id="activeFilters" style="display: none;">
+                <span class="me-2">Active filters:</span>
+                <div id="filterTags"></div>
+                <button class="btn btn-sm btn-outline-secondary ms-2" id="clearFilters">Clear All</button>
+            </div>
+        </div>
+        
+        <!-- Results count and sorting -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <p class="mb-0"><span id="resultCount">24</span> doctors found</p>
+            <div class="d-flex align-items-center">
+                <label for="sortOption" class="me-2">Sort by:</label>
+                <select class="form-select form-select-sm" style="width: auto;" id="sortOption">
+                    <option value="name">Name</option>
+                    <option value="experience">Experience</option>
+                    <option value="rating">Rating</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div class="loader" id="loader">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Finding the best doctors for you...</p>
+        </div>
+        
+        <!-- Doctor List -->
+        <div class="row" id="doctorList">
+            <!-- Doctor cards will be dynamically generated here -->
+        </div>
+        
+        <!-- Load More Button -->
+        <div class="text-center mt-4 mb-5">
+            <button class="btn btn-outline-primary px-4 py-2" id="loadMoreBtn">
+                <i class="fas fa-sync-alt me-2"></i>Load More Doctors
+            </button>
+        </div>
+    </div>
+    
+    <!-- Doctor Modal -->
+    <div class="modal fade" id="doctorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content doctor-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Doctor Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="" id="modalDoctorImage" class="img-fluid rounded" alt="Doctor">
+                        </div>
+                        <div class="col-md-8">
+                            <h3 id="modalDoctorName"></h3>
+                            <p id="modalDoctorSpecialty" class="text-muted"></p>
+                            <div class="rating" id="modalDoctorRating"></div>
+                            <p><strong>Experience:</strong> <span id="modalDoctorExperience"></span></p>
+                            <p><strong>Hospital:</strong> <span id="modalDoctorHospital"></span></p>
+                            <p><strong>Languages:</strong> <span id="modalDoctorLanguages">English, Hindi, Gujarati</span></p>
+                            
+                            <div class="doctor-stats">
+                                <div class="stat-item">
+                                    <div class="stat-number" id="modalPatients">500+</div>
+                                    <div>Patients</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number" id="modalSurgeries">200+</div>
+                                    <div>Surgeries</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number" id="modalRating">4.8</div>
+                                    <div>Rating</div>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mt-4">Available Time Slots</h5>
+                            <div class="d-flex flex-wrap" id="timeSlots">
+                                <!-- Time slots will be dynamically generated -->
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button class="btn btn-primary" id="bookAppointmentBtn">Book Appointment</button>
+                                <button class="btn btn-outline-secondary ms-2" id="sendMessageBtn">Send Message</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- About Doctor Section -->
+                    <div>
+                        <h5>About Doctor</h5>
+                        <p id="modalDoctorBio">Doctor bio will appear here.</p>
+                    </div>
+                    
+                    <!-- Patient Reviews -->
+                    <div>
+                        <h5>Patient Reviews</h5>
+                        <div id="patientReviews">
+                            <!-- Reviews will be dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Doctor data
+        const doctors = [
+            {
+                id: 1,
+                name: "Dr. Alok Ranjan",
+                specialty: "Cardiologist",
+                hospital: "Kiran Hospital",
+                experience: "15+",
+                image: "img/team/doc1.png",
+                rating: 4.8,
+                availability: true,
+                patients: 2500,
+                surgeries: 750,
+                languages: "English, Hindi, Gujarati",
+                bio: "Dr. Alok Ranjan is a renowned Cardiologist with over 15 years of experience in treating complex cardiac conditions. He specializes in interventional cardiology and has performed numerous successful angioplasties and stent placements.",
+                reviews: [
+                    { name: "Rajesh Patel", rating: 5, comment: "Excellent doctor! Very thorough and caring." },
+                    { name: "Anita Sharma", rating: 4, comment: "Professional and knowledgeable. Explained everything clearly." }
+                ],
+                timeSlots: ["09:00 AM", "11:30 AM", "03:00 PM", "05:30 PM"]
+            },
+            {
+                id: 2,
+                name: "Dr. Kalpesh D. Gohel",
+                specialty: "Neurologist",
+                hospital: "Kiran Hospital",
+                experience: "10+",
+                image: "img/team/doc2.png",
+                rating: 4.7,
+                availability: true,
+                patients: 1800,
+                surgeries: 350,
+                languages: "English, Hindi, Gujarati",
+                bio: "Dr. Kalpesh Gohel is a skilled Neurologist specializing in movement disorders and neuro-rehabilitation. With a decade of experience, he has helped numerous patients with conditions like Parkinson's disease, epilepsy, and stroke recovery.",
+                reviews: [
+                    { name: "Meena Shah", rating: 5, comment: "Very patient and explained everything in detail. Highly recommend!" },
+                    { name: "Vikram Desai", rating: 4, comment: "Professional approach and effective treatment plan." }
+                ],
+                timeSlots: ["10:00 AM", "12:30 PM", "04:00 PM"]
+            },
+            // Adding more doctors
+            {
+                id: 3,
+                name: "Dr. Arvind G. Patel",
+                specialty: "Plastic Surgery",
+                hospital: "Kiran Hospital",
+                experience: "10+",
+                image: "img/team/doc3.png",
+                rating: 4.6,
+                availability: false,
+                patients: 1500,
+                surgeries: 950,
+                languages: "English, Hindi, Gujarati",
+                bio: "Dr. Arvind Patel is an expert in reconstructive and cosmetic surgery with specialized training from leading institutions. He is known for his meticulous approach to both medical and aesthetic procedures.",
+                reviews: [
+                    { name: "Sunita Patel", rating: 5, comment: "Excellent results after my procedure. Very happy!" },
+                    { name: "Rohit Mehta", rating: 4, comment: "Great doctor with attention to detail." }
+                ],
+                timeSlots: ["09:30 AM", "02:00 PM", "05:00 PM"]
+            },
+            {
+                id: 5,
+                name: "Dr. Kirit Shah",
+                specialty: "Neuro Surgeon",
+                hospital: "Unique Hospital",
+                experience: "8",
+                image: "img/team/doc5.jpg",
+                rating: 4.5,
+                availability: true,
+                patients: 1300,
+                surgeries: 400,
+                languages: "English, Hindi, Gujarati",
+                bio: "Dr. Kirit Shah specializes in neurosurgery with a focus on brain and spine surgeries.",
+                reviews: [],
+                timeSlots: ["10:00 AM", "01:00 PM"]
+            },
+            {
+                id: 6,
+                name: "Dr. Vitrag Shah",
+                specialty: "Plastic & Reconstruction",
+                hospital: "Unique Hospital",
+                experience: "6",
+                image: "img/team/doc6.jpg",
+                rating: 4.2,
+                availability: true,
+                patients: 900,
+                surgeries: 300,
+                languages: "English, Hindi",
+                bio: "Dr. Vitrag Shah is known for his expertise in reconstructive surgeries.",
+                reviews: [],
+                timeSlots: ["11:00 AM", "03:00 PM"]
+            },
+            {
+                id: 7,
+                name: "Dr. Honey Parekh",
+                specialty: "Oncophysician",
+                hospital: "Sunshine Hospital",
+                experience: "6",
+                image: "img/team/doc7.jpg",
+                rating: 4.0,
+                availability: true,
+                patients: 800,
+                surgeries: 200,
+                languages: "English, Gujarati",
+                bio: "Dr. Honey Parekh specializes in oncology and cancer treatments.",
+                reviews: [],
+                timeSlots: ["10:30 AM", "02:30 PM"]
+            }
+            // More doctors would be added similarly
+        ];
+        
+        // More doctors can be added to the array based on your original HTML doctor list
+        
+        // Function to generate doctor cards
+        function generateDoctorCards(doctorArray = doctors) {
+            const doctorList = document.getElementById('doctorList');
+            doctorList.innerHTML = '';
+            
+            if (doctorArray.length === 0) {
+                doctorList.innerHTML = '<div class="col-12 text-center py-5"><h4>No doctors found matching your criteria</h4><p>Try adjusting your filters or search terms</p></div>';
+                return;
+            }
+            
+            doctorArray.forEach((doctor, index) => {
+                // Create rating stars
+                let ratingStars = '';
+                const fullStars = Math.floor(doctor.rating);
+                const hasHalfStar = doctor.rating % 1 >= 0.5;
+                
+                for (let i = 0; i < fullStars; i++) {
+                    ratingStars += '<i class="fas fa-star"></i>';
+                }
+                
+                if (hasHalfStar) {
+                    ratingStars += '<i class="fas fa-star-half-alt"></i>';
+                }
+                
+                const remainingStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                for (let i = 0; i < remainingStars; i++) {
+                    ratingStars += '<i class="far fa-star"></i>';
+                }
+                
+                // Create doctor card with animation delay
+                const doctorCard = document.createElement('div');
+                doctorCard.className = 'col-md-4 fade-in';
+                doctorCard.style.animationDelay = `${index * 0.1}s`;
+                
+                doctorCard.innerHTML = `
+                    <div class="card doctor-card" data-doctor-id="${doctor.id}">
+                        <div class="availability-badge ${doctor.availability ? 'available' : 'busy'}">
+                            ${doctor.availability ? 'Available Today' : 'Fully Booked'}
+                        </div>
+                        <img src="${doctor.image}" class="card-img-top" alt="${doctor.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${doctor.name}</h5>
+                            <p class="card-text">${doctor.specialty} at ${doctor.hospital}</p>
+                            <div class="rating mb-2">
+                                ${ratingStars} <span class="ms-1">(${doctor.rating})</span>
+                            </div>
+                            <p><strong>Experience:</strong> ${doctor.experience} years</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <a href="doc-appoint.html" class="btn btn-outline-primary">Book Appointment</a>
+                                <button class="btn btn-link view-profile" data-doctor-id="${doctor.id}">View Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                doctorList.appendChild(doctorCard);
+            });
+            
+            // Update doctor count
+            document.getElementById('resultCount').textContent = doctorArray.length;
+            
+            // Add event listeners to view profile buttons
+            document.querySelectorAll('.view-profile, .doctor-card').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('btn')) {
+                        const doctorId = this.dataset.doctorId || this.closest('.doctor-card').dataset.doctorId;
+                        showDoctorModal(doctorId);
+                    }
+                });
+            });
+        }
+        
+        // Function to show doctor modal
+        function showDoctorModal(doctorId) {
+            const doctor = doctors.find(doc => doc.id == doctorId);
+            if (!doctor) return;
+            
+            // Populate modal with doctor info
+            document.getElementById('modalDoctorImage').src = doctor.image;
+            document.getElementById('modalDoctorName').textContent = doctor.name;
+            document.getElementById('modalDoctorSpecialty').textContent = `${doctor.specialty} at ${doctor.hospital}`;
+            document.getElementById('modalDoctorExperience').textContent = `${doctor.experience} years`;
+            document.getElementById('modalDoctorHospital').textContent = doctor.hospital;
+            document.getElementById('modalDoctorLanguages').textContent = doctor.languages;
+            document.getElementById('modalPatients').textContent = doctor.patients + '+';
+            document.getElementById('modalSurgeries').textContent = doctor.surgeries + '+';
+            document.getElementById('modalRating').textContent = doctor.rating;
+            document.getElementById('modalDoctorBio').textContent = doctor.bio;
+            
+            // Generate rating stars
+            let ratingStars = '';
+            const fullStars = Math.floor(doctor.rating);
+            const hasHalfStar = doctor.rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                ratingStars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                ratingStars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const remainingStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < remainingStars; i++) {
+                ratingStars += '<i class="far fa-star"></i>';
+            }
+            
+            document.getElementById('modalDoctorRating').innerHTML = `${ratingStars} <span>(${doctor.rating})</span>`;
+            
+            // Generate time slots
+            const timeSlots = document.getElementById('timeSlots');
+            timeSlots.innerHTML = '';
+            doctor.timeSlots.forEach(slot => {
+                const timeButton = document.createElement('button');
+                timeButton.className = 'btn btn-outline-primary m-1';
+                timeButton.textContent = slot;
+                timeButton.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('#timeSlots .btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                });
+                timeSlots.appendChild(timeButton);
+            });
+            
+            // Generate patient reviews
+            const reviewsContainer = document.getElementById('patientReviews');
+            reviewsContainer.innerHTML = '';
+            doctor.reviews.forEach(review => {
+                // Create rating stars for the review
+                let reviewStars = '';
+                for (let i = 0; i < review.rating; i++) {
+                    reviewStars += '<i class="fas fa-star"></i>';
+                }
+                for (let i = 0; i < 5 - review.rating; i++) {
+                    reviewStars += '<i class="far fa-star"></i>';
+                }
+                
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'card mb-2';
+                reviewElement.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="mb-0">${review.name}</h6>
+                            <div class="rating small">${reviewStars}</div>
+                        </div>
+                        <p class="mb-0">${review.comment}</p>
+                    </div>
+                `;
+                reviewsContainer.appendChild(reviewElement);
+            });
+            
+            // Show the modal
+            const doctorModal = new bootstrap.Modal(document.getElementById('doctorModal'));
+            doctorModal.show();
+        }
+        
+        // Function to filter doctors
+        function filterDoctors() {
+            const nameFilter = document.getElementById('doctorNameSearch').value.toLowerCase();
+            const specialtyFilter = document.getElementById('specialtyFilter').value.toLowerCase();
+            const hospitalFilter = document.getElementById('hospitalFilter').value.toLowerCase();
+            
+            // Show loader
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('doctorList').style.display = 'none';
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                const filteredDoctors = doctors.filter(doctor => {
+                    const matchesName = doctor.name.toLowerCase().includes(nameFilter);
+                    const matchesSpecialty = specialtyFilter === '' || doctor.specialty.toLowerCase().includes(specialtyFilter);
+                    const matchesHospital = hospitalFilter === '' || doctor.hospital.toLowerCase().includes(hospitalFilter);
+                    
+                    return matchesName && matchesSpecialty && matchesHospital;
+                });
+                
+                // Update active filters display
+                updateActiveFilters(nameFilter, specialtyFilter, hospitalFilter);
+                
+                // Sort the filtered doctors
+                sortDoctors(filteredDoctors);
+                
+                // Hide loader and show results
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('doctorList').style.display = 'flex';
+                
+                // Generate doctor cards
+                generateDoctorCards(filteredDoctors);
+            }, 1000); // Simulated 1 second delay
+        }
+        
+        // Function to update active filters display
+        function updateActiveFilters(name, specialty, hospital) {
+            const activeFilters = document.getElementById('activeFilters');
+            const filterTags = document.getElementById('filterTags');
+            filterTags.innerHTML = '';
+            
+            let hasActiveFilters = false;
+            
+            if (name) {
+                const nameTag = document.createElement('span');
+                nameTag.className = 'badge bg-primary me-2';
+                nameTag.innerHTML = `Name: ${name} <i class="fas fa-times ms-1" data-filter="name"></i>`;
+                filterTags.appendChild(nameTag);
+                hasActiveFilters = true;
+            }
+            
+            if (specialty) {
+                const specialtyOption = document.querySelector(`#specialtyFilter option[value="${specialty}"]`);
+                const specialtyText = specialtyOption ? specialtyOption.textContent : specialty;
+                
+                const specialtyTag = document.createElement('span');
+                specialtyTag.className = 'badge bg-primary me-2';
+                specialtyTag.innerHTML = `Specialty: ${specialtyText} <i class="fas fa-times ms-1" data-filter="specialty"></i>`;
+                filterTags.appendChild(specialtyTag);
+                hasActiveFilters = true;
+            }
+            
+            if (hospital) {
+                const hospitalOption = document.querySelector(`#hospitalFilter option[value="${hospital}"]`);
+                const hospitalText = hospitalOption ? hospitalOption.textContent : hospital;
+                
+                const hospitalTag = document.createElement('span');
+                hospitalTag.className = 'badge bg-primary me-2';
+                hospitalTag.innerHTML = `Hospital: ${hospitalText} <i class="fas fa-times ms-1" data-filter="hospital"></i>`;
+                filterTags.appendChild(hospitalTag);
+                hasActiveFilters = true;
+            }
+            
+            activeFilters.style.display = hasActiveFilters ? 'block' : 'none';
+            
+            // Add event listeners to remove filter tags
+            document.querySelectorAll('#filterTags .fa-times').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const filterType = this.dataset.filter;
+                    
+                    if (filterType === 'name') {
+                        document.getElementById('doctorNameSearch').value = '';
+                    } else if (filterType === 'specialty') {
+                        document.getElementById('specialtyFilter').value = '';
+                    } else if (filterType === 'hospital') {
+                        document.getElementById('hospitalFilter').value = '';
+                    }
+                    
+                    filterDoctors();
+                });
+            });
+        }
+        
+        // Function to sort doctors
+        function sortDoctors(doctorArray) {
+            const sortOption = document.getElementById('sortOption').value;
+            doctorArray.sort((a, b) => {
+                if (sortOption === 'name') {
+                    return a.name.localeCompare(b.name);
+                } else if (sortOption === 'experience') {
+                    return parseInt(b.experience) - parseInt(a.experience);
+                } else if (sortOption === 'rating') {
+                    return b.rating - a.rating;
+                }
+            });
+        }
+
+        // Function to filter and sort doctors
+        function filterDoctors() {
+            const nameFilter = document.getElementById('doctorNameSearch').value.toLowerCase();
+            const specialtyFilter = document.getElementById('specialtyFilter').value.toLowerCase();
+            const hospitalFilter = document.getElementById('hospitalFilter').value.toLowerCase();
+
+            const filteredDoctors = doctors.filter(doctor => {
+                return (
+                    doctor.name.toLowerCase().includes(nameFilter) &&
+                    (specialtyFilter === '' || doctor.specialty.toLowerCase().includes(specialtyFilter)) &&
+                    (hospitalFilter === '' || doctor.hospital.toLowerCase().includes(hospitalFilter))
+                );
+            });
+
+            sortDoctors(filteredDoctors);
+            generateDoctorCards(filteredDoctors);
+        }
+
+        // Event listener for filter button
+        document.getElementById('searchBtn').addEventListener('click', filterDoctors);
+
+        // Event listener for sort option
+        document.getElementById('sortOption').addEventListener('change', filterDoctors);
+
+        // Initial doctor card generation
+        window.onload = () => {
+            generateDoctorCards();
+        };
+
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

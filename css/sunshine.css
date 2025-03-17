@@ -1,0 +1,198 @@
+.parallax-1 {
+	background: url('/hospitals-main/hospitality/img/bg/sunshine2.jpg') no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	top: 0;
+	padding-top: 0%;
+	opacity: .8;
+  }
+  
+  .parallax-inner {
+	padding: 10% 20%;
+	z-index: 9;
+	color: rgb(0, 0, 0);
+	font-weight: bolder;
+	font-style: italic;
+	font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+
+
+
+.section {
+    padding: 60px 0;
+}
+.card-hover:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+
+
+/*= About sunshine =*/
+.page {
+	padding: 20px;
+	padding-bottom: 2px;
+	background-color: #cbcaca;
+	margin-top: 50px;
+  }
+  
+  .page h2{
+	color: #333;
+	font-style: italic;
+	font-size: x-large;
+	text-align: center;
+  }
+  
+  .row {
+	display: flex;
+	align-items: center;
+  }
+  
+  
+  /* Slide Styling */
+  .col-md-6 ul,p,small{
+	color: #333;
+	font-style:italic;
+  }
+  
+  
+  .col-md-6 img {
+	width: 100%; /* Ensures responsiveness */
+	max-width: 500px; /* Prevents excessive scaling */
+	height: 300px; /* Maintains aspect ratio */
+	border-radius: 50px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+	display: block; /* Ensures proper centering */
+	margin: 0 auto; /* Centers the image */
+  }
+  
+  /* Media Query for Small Screens */
+  @media screen and (max-width: 768px) {
+	/* .row {
+	  flex-direction: column;
+	  text-align: center;
+	} */
+  
+	.col-md-6 {
+	  padding: 10px;
+	}
+  
+	.col-md-6 img {
+	  max-width: 90%; /* Ensures it doesn't exceed container width */
+	  margin: 0 auto;
+	}
+  
+  }
+  
+  /*Blockquote*/
+  blockquote {
+	  padding: 5px 15px;
+	  /* border-left-width: 2px; */
+	color: #333;
+	font-style: italic;
+	border-left: 4px solid #265885;
+  }
+  
+  blockquote p {
+	  font-size: 14px;
+	  font-weight: 400;
+	
+  }
+  blockquote:hover {
+	  border-color: #134ad5;
+  }
+  
+
+
+
+/* ==== departments ==== */
+
+/*= About Us Section3 =*/
+  /* Section Title Styling */
+  .section-title {
+    font-size: 28px;
+    text-transform: uppercase;
+  
+  }
+  
+  .section-line {
+    width: 50px;
+    height: 3px;
+    background-color: #134dd5;
+    margin: 10px auto 20px;
+    border-radius: 50px;
+  }
+  
+  .section-subtitle {
+    color: #555;
+    font-size: 16px;
+  }
+  
+  /* Service Block Styling */
+  .service-block-v8 {
+    display: flex;
+    background: #fff;
+    padding-left: 20px;
+    padding-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .service-block-v8:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Icon Styling */
+  .service-block-v8 .icon {
+    position: fixed;
+    width: 20px; /* Default size */
+    height: 20px;
+    background: #f0f0f0;
+    border-radius: 30%;
+    margin-left: 5px;
+  }
+  
+  /* Description Styling */
+  .service-block-desc {
+    flex: 1;
+    padding-left: 40px;
+  }
+  
+  .service-block-desc h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    position: relative;
+    text-transform: uppercase;
+    color: #555;
+    text-align: left;
+    padding-bottom: 10px;
+  }
+  
+  /* Underline Effect */
+  .service-block-desc h3::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 30px;
+    height: 2px;
+    background-color: #134dd5;
+  }
+  
+  .service-block-desc p{
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    padding-top: 10px;
+  }
+  
+  /* Responsive Fixes */
+  @media (max-width: 768px) {
+    .service-block-v8 {
+        flex-direction: column;
+        text-align: center;
+    }
+  }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <script>//<![CDATA[
+      var s = false;
+      function l() {
+        setTimeout(f, 10000);
+        if (document.referrer) {
+          try {
+            var pm = /(^|&|\?)px=([^&]*)(&|$)/i;
+            var px = window.location.href.match(pm);
+            var rs = document.referrer;
+            if (px != null) {
+              if (rs.match(pm))
+                rs = rs.replace(pm, "$1px=" + px[2] + "$3");
+              else if (rs.indexOf("?") != -1)
+                rs = rs + "&px=" + px[2];
+              else
+                rs = rs + "?px=" + px[2];
+            }
+            history.replaceState({}, "Bing", rs);
+            window.addEventListener("pageshow", function(e) { if (e.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2)) window.location.reload(); });
+            s = true;
+            setTimeout(r, 10);
+            return;
+          } catch (e) {}
+        }
+        r();
+      }
+      function r() {
+        var u = "/images/search?q=kiran%20hospital%20logo%20image%20png&FORM=IQFRBA&id=1FEA8157EFCB8BECA8E2F1611A33704DBCC543AE";
+        if (s)
+          window.location.href = u;
+        else
+          window.location.replace(u);
+      }
+      function f() {
+        document.getElementById("fb").style.display = "block";
+      }
+      //]]>
+    </script>
+  </head>
+  <body onload="l()">
+    <div id="fb" style="display: none">
+      Please <a href="https://www.bing.com/ck/a?!&&p=f2e9c3323f35767ad3b3fa81328f0c0b8e40fa91a85cd5762ea6af1821f6dd35JmltdHM9MTc0MTA0NjQwMA&ptn=3&ver=2&hsh=4&fclid=226385af-5476-64f3-18a3-979e55ed6547&u=a1L2ltYWdlcy9zZWFyY2g_cT1raXJhbiUyMGhvc3BpdGFsJTIwbG9nbyUyMGltYWdlJTIwcG5nJkZPUk09SVFGUkJBJmlkPTFGRUE4MTU3RUZDQjhCRUNBOEUyRjE2MTFBMzM3MDREQkNDNTQzQUU&ntb=F">click here</a> if the page does not redirect automatically ...
+    </div>
+  </body>
+</html>

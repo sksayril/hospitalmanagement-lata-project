@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Departments & Services</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/department.css">
+    <link rel="stylesheet" href="css/footer.css">
+    
+    <style>
+        /* Custom styles */
+        .department-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+            height: 100%;
+        }
+        
+        .department-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-hover {
+            transition: all 0.3s;
+            cursor: pointer;
+            height: 100%;
+            border-left: 5px solid transparent;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-left: 5px solid #0d6efd;
+            background-color: #f8f9fa;
+        }
+        
+        .parallax-1 {
+            background-image: url('img/medical/hospital-hero.jpg');
+            min-height: 300px;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+        
+        .parallax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(42, 81, 139, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .parallax-content {
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .filter-btn {
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .filter-btn.active {
+            background-color: #2a518b !important;
+            border-color: #2a518b !important;
+        }
+        
+        .department-detail {
+            display: none;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .specialist-tag {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .chatbox {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        
+        .chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #2a518b;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            background-color: #2a518b;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .chat-body {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .chat-input input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        
+        .chat-input button {
+            background-color: #2a518b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Animation for cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Progress bar for departments */
+        .progress {
+            height: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(42, 81, 139, 0.1);
+            color: #2a518b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo/hms.png" width="160" height="50" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="hospital.html">Hospitals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="doctor.html">Doctors & Specialities</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="department.html">Departments & Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                    <li id="registerOption" class="nav-item"><a class="nav-link" href="register.html">Registration</a></li>
+                    <button class="nav-button animated-btn" onclick="redirectToBooking()">Book Appointment</button>
+                </ul>
+                <li id="profileNav" class="nav-item" style="display: none;">
+                    <div id="profileContainer">
+                        <div id="profileLogo" class="profile-logo"></div>
+                        <span id="profileInitial" style="display: none;">U</span>
+                        <span id="dropdownArrow">▼</span>
+                    </div>
+                    <div id="profileDropdown" class="dropdown1">
+                        <a href="profile.html">Edit Profile</a>
+                        <a href="#">Help & Support</a>
+                        <a href="#" id="logout">Logout</a>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Parallax -->
+    <section class="parallax-1">
+        <div class="parallax-overlay">
+            <div class="parallax-content">
+                <h1>Our Medical Departments & Services</h1>
+                <p class="lead">Providing comprehensive healthcare through specialized departments</p>
+                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#appointmentModal">Find a Department</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="mb-4">Medical Departments & Services</h2>
+                <p class="text-muted">Explore our specialized departments offering world-class healthcare services.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle me-2"></i> Currently serving patients with 24/7 emergency support.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search and Filter Bar -->
+        <div class="search-bar mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="departmentName" placeholder="Search Department">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="filter-buttons">
+                        <button class="btn btn-outline-primary filter-btn active" data-filter="all">All</button>
+                        <button class="btn btn-outline-primary filter-btn" data-filter="clinical">Clinical</button>
+                        <button class="btn btn-outline-primary filter-btn" data-filter="diagnostic">Diagnostic</button>
+                        <button class="btn btn-outline-primary filter-btn" data-filter="specialty">Specialty</button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" id="searchBtn" style="background-color: rgb(42, 81, 139);">
+                        <i class="fas fa-filter me-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Department List -->
+        <div class="row" id="departmentList">
+            <!-- Cardiology -->
+            <div class="col-md-4 department-item animated-card" data-category="clinical specialty">
+                <div class="card department-card">
+                    <div class="position-relative">
+                        <img src="img/medical/014.png" class="card-img-top" alt="Cardiology">
+                        <span class="position-absolute top-0 end-0 badge bg-danger m-2">High Demand</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Cardiology</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="text-muted me-2">Department Rating:</small>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                            <small class="ms-1">(4.5)</small>
+                        </div>
+                        <p class="card-text">Advanced heart care including surgery, diagnosis, and rehabilitation.</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary show-details-btn" data-department="cardiology">Learn More</button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-calendar-check me-1"></i> Book
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <small class="text-muted"><i class="fas fa-user-md me-1"></i> 12 Specialists</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 24/7</small>
+                    </div>
+                </div>
+                <div class="department-detail" id="cardiology-detail">
+                    <h5>Cardiology Department</h5>
+                    <p>Our cardiology department offers comprehensive care for all heart-related conditions. Services include:</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Cardiac Surgery
+                            <span class="badge bg-primary rounded-pill">98% Success</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Interventional Cardiology
+                            <span class="badge bg-primary rounded-pill">24/7</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Electrophysiology
+                            <span class="badge bg-primary rounded-pill">New</span>
+                        </li>
+                    </ul>
+                    <div class="specialists mb-3">
+                        <h6>Our Specialists:</h6>
+                        <span class="specialist-tag">Dr. John Smith</span>
+                        <span class="specialist-tag">Dr. Maria Garcia</span>
+                        <span class="specialist-tag">Dr. Robert Johnson</span>
+                    </div>
+                    <div class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary hide-details-btn">Hide Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orthopedics -->
+            <div class="col-md-4 department-item animated-card" data-category="clinical specialty">
+                <div class="card department-card">
+                    <img src="img/medical/015.png" class="card-img-top" alt="Orthopedics">
+                    <div class="card-body">
+                        <h5 class="card-title">Orthopedics</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="text-muted me-2">Department Rating:</small>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="far fa-star text-warning"></i>
+                            <small class="ms-1">(4.0)</small>
+                        </div>
+                        <p class="card-text">Treatment for bone, joint, and muscular disorders including surgeries.</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary show-details-btn" data-department="orthopedics">Learn More</button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-calendar-check me-1"></i> Book
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <small class="text-muted"><i class="fas fa-user-md me-1"></i> 8 Specialists</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 8am-8pm</small>
+                    </div>
+                </div>
+                <div class="department-detail" id="orthopedics-detail">
+                    <h5>Orthopedics Department</h5>
+                    <p>Our orthopedics department specializes in the diagnosis and treatment of conditions affecting the musculoskeletal system.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Joint Replacement
+                            <span class="badge bg-primary rounded-pill">96% Success</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Sports Medicine
+                            <span class="badge bg-primary rounded-pill">Elite Care</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Spine Surgery
+                            <span class="badge bg-primary rounded-pill">Advanced</span>
+                        </li>
+                    </ul>
+                    <div class="specialists mb-3">
+                        <h6>Our Specialists:</h6>
+                        <span class="specialist-tag">Dr. Sarah Wilson</span>
+                        <span class="specialist-tag">Dr. David Lee</span>
+                    </div>
+                    <div class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary hide-details-btn">Hide Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Neurology -->
+            <div class="col-md-4 department-item animated-card" data-category="clinical specialty">
+                <div class="card department-card">
+                    <img src="img/medical/016.png" class="card-img-top" alt="Neurology">
+                    <div class="card-body">
+                        <h5 class="card-title">Neurology</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="text-muted me-2">Department Rating:</small>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <small class="ms-1">(4.9)</small>
+                        </div>
+                        <p class="card-text">Specialized care for brain and nervous system disorders.</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary show-details-btn" data-department="neurology">Learn More</button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-calendar-check me-1"></i> Book
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <small class="text-muted"><i class="fas fa-user-md me-1"></i> 10 Specialists</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 9am-6pm</small>
+                    </div>
+                </div>
+                <div class="department-detail" id="neurology-detail">
+                    <h5>Neurology Department</h5>
+                    <p>Our neurology department provides diagnosis and treatment for conditions affecting the brain, spinal cord, and nervous system.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Stroke Care
+                            <span class="badge bg-primary rounded-pill">Rapid Response</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Epilepsy Management
+                            <span class="badge bg-primary rounded-pill">Specialized</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Neurosurgery
+                            <span class="badge bg-primary rounded-pill">Advanced</span>
+                        </li>
+                    </ul>
+                    <div class="specialists mb-3">
+                        <h6>Our Specialists:</h6>
+                        <span class="specialist-tag">Dr. Michael Brown</span>
+                        <span class="specialist-tag">Dr. Patricia Chen</span>
+                        <span class="specialist-tag">Dr. Thomas Rodriguez</span>
+                    </div>
+                    <div class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary hide-details-btn">Hide Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Radiology -->
+            <div class="col-md-4 department-item animated-card" data-category="diagnostic">
+                <div class="card department-card">
+                    <img src="img/medical/radiology.jpg" class="card-img-top" alt="Radiology">
+                    <div class="card-body">
+                        <h5 class="card-title">Radiology</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="text-muted me-2">Department Rating:</small>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="far fa-star text-warning"></i>
+                            <small class="ms-1">(4.2)</small>
+                        </div>
+                        <p class="card-text">Advanced imaging services including MRI, CT, ultrasound, and X-rays.</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary show-details-btn" data-department="radiology">Learn More</button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-calendar-check me-1"></i> Book
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <small class="text-muted"><i class="fas fa-user-md me-1"></i> 6 Specialists</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 24/7</small>
+                    </div>
+                </div>
+                <div class="department-detail" id="radiology-detail">
+                    <h5>Radiology Department</h5>
+                    <p>Our radiology department provides advanced imaging services to aid in the diagnosis and treatment of various conditions.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            MRI Scanning
+                            <span class="badge bg-primary rounded-pill">3T Technology</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            CT Scans
+                            <span class="badge bg-primary rounded-pill">128-Slice</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Interventional Radiology
+                            <span class="badge bg-primary rounded-pill">Minimally Invasive</span>
+                        </li>
+                    </ul>
+                    <div class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary hide-details-btn">Hide Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pediatrics -->
+            <div class="col-md-4 department-item animated-card" data-category="clinical specialty">
+                <div class="card department-card">
+                    <div class="position-relative">
+                        <img src="img/medical/pediatrics.jpg" class="card-img-top" alt="Pediatrics">
+                        <span class="position-absolute top-0 end-0 badge bg-success m-2">Child-Friendly</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pediatrics</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="text-muted me-2">Department Rating:</small>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                            <small class="ms-1">(4.7)</small>
+                        </div>
+                        <p class="card-text">Specialized care for children and adolescents from birth to 18 years.</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary show-details-btn" data-department="pediatrics">Learn More</button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-calendar-check me-1"></i> Book
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <small class="text-muted"><i class="fas fa-user-md me-1"></i> 15 Specialists</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 8am-8pm</small>
+                    </div>
+                </div>
+                <div class="department-detail" id="pediatrics-detail">
+                    <h5>Pediatrics Department</h5>
+                    <p>Our pediatrics department provides comprehensive medical care for infants, children, and adolescents.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Well-Child Visits
+                            <span class="badge bg-primary rounded-pill">Preventive Care</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Pediatric Intensive Care
+                            <span class="badge bg-primary rounded-pill">24/7</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Vaccinations
+                            <span class="badge bg-primary rounded-pill">Complete Schedule</span>
+                        </li>
+                    </ul>
+                    <div class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary hide-details-btn">Hide Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Emergency Care -->
+            <div class="col-md-4 department-item animated-card" data-category="clinical">
+                <div class="card department-card">
+                    <div class="position-relative">
+                        <img src="img/medical/emergency.jpg" class="card-img-top" alt="Emergency Care">
+                        <span class="position-absolute top-0 end-0 badge bg-danger m-2">24/7 Service</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Emergency Care</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="text-muted me-2">Department Rating:</small>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <small class="ms-1">(4.8)</small>
+                        </div>
+                        <p class="card-text">Immediate care for life-threatening conditions, available 24/7.</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary show-details-btn" data-department="emergency">Learn More</button>
+                            <a href="tel:911" class="btn btn-sm btn-danger">
+                                <i class="fas fa-phone-alt me-1"></i> Emergency
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <small class="text-muted"><i class="fas fa-user-md me-1"></i> 24 Staff</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 24/7</small>
+                    </div>
+                </div>
+                <div class="department-detail" id="emergency-detail">
+                    <h5>Emergency Department</h5>
+                    <p>Our emergency department provides immediate care for patients with serious injuries or illnesses.</p>
+                    <div class="alert alert-danger">
+                        <strong>For immediate emergencies, call 911</strong>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Trauma Care
+                            <span class="badge bg-primary rounded-pill">Level I Center</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Cardiac Emergency
+                            <span class="badge bg-primary rounded-pill">Rapid Response</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Stroke Care
+                            <span class="badge bg-primary rounded-pill">Gold Certified</span>
+                        </li>
+                    </ul>
+                    <div class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary hide-details-btn">Hide Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- No Results Message -->
+        <!-- No Results Message -->
+<div id="noResults" class="text-center mt-4" style="display: none;">
+    <p class="text-muted">No departments found matching your criteria.</p>
+</div>
+
+<!-- Footer Section -->
+<!-- <footer class="bg-dark text-white mt-5 p-4 text-center">
+    <p>&copy; 2025 Hospital Management System. All Rights Reserved.</p>
+</footer> -->
+
+<!-- Chat Icon -->
+<div class="chat-icon" id="chatIcon">
+    <i class="fas fa-comment-alt"></i>
+</div>
+
+<!-- Chatbox -->
+<div class="chatbox" id="chatbox">
+    <div class="chat-header">
+        <span>Live Chat Support</span>
+        <i class="fas fa-times" id="closeChat"></i>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <p class="text-muted">Welcome to our support chat. How can we assist you?</p>
+    </div>
+    <div class="chat-input">
+        <input type="text" placeholder="Type your message...">
+        <button id="sendMessage">Send</button>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Chatbox Toggle Logic
+    const chatIcon = document.getElementById('chatIcon');
+    const chatbox = document.getElementById('chatbox');
+    const closeChat = document.getElementById('closeChat');
+    
+    chatIcon.addEventListener('click', () => {
+        chatbox.style.display = 'flex';
+    });
+
+    closeChat.addEventListener('click', () => {
+        chatbox.style.display = 'none';
+    });
+
+    // Search and Filter Logic
+    const searchBtn = document.getElementById('searchBtn');
+    const departmentName = document.getElementById('departmentName');
+    const departmentItems = document.querySelectorAll('.department-item');
+    const noResults = document.getElementById('noResults');
+
+    searchBtn.addEventListener('click', () => {
+        const searchTerm = departmentName.value.toLowerCase();
+        let hasResults = false;
+
+        departmentItems.forEach(item => {
+            const title = item.querySelector('.card-title').textContent.toLowerCase();
+            if (title.includes(searchTerm)) {
+                item.style.display = 'block';
+                hasResults = true;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        noResults.style.display = hasResults ? 'none' : 'block';
+    });
+
+    // Filter Button Logic
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+
+            departmentItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                if (filter === 'all' || category.includes(filter)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Show and Hide Department Details
+    const showDetailButtons = document.querySelectorAll('.show-details-btn');
+    const hideDetailButtons = document.querySelectorAll('.hide-details-btn');
+
+    showDetailButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const department = button.getAttribute('data-department');
+            document.getElementById(`${department}-detail`).style.display = 'block';
+        });
+    });
+
+    hideDetailButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            button.parentElement.parentElement.style.display = 'none';
+        });
+    });
+</script>
+
+
+
+    <!--=== Section 3 ===-->
+    <!-- Chat Icon -->
+    <div class="chat-icon" onclick="toggleChat()">
+        <i class="fa-solid fa-comment-medical"></i>
+    </div>
+
+    <!-- Chatbox -->
+    <div class="chatbox" id="chatBox">
+        <div class="chat-header">
+            Hospital Chat Support
+            <i class="fa-solid fa-xmark" onclick="toggleChat()"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <p><strong>Bot:</strong> Welcome to Hospital Chat Support! How can I assist you today?</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadMessages);
+
+        function toggleChat() {
+            let chatBox = document.getElementById("chatBox");
+            chatBox.style.display = (chatBox.style.display === "flex") ? "none" : "flex";
+        }
+
+        function sendMessage() {
+            let inputField = document.getElementById("userInput");
+            let message = inputField.value.trim();
+            if (message === "") return;
+
+            addMessage("You", message);
+            inputField.value = "";
+
+            // Simulate bot response
+            setTimeout(() => {
+                let botReply = generateBotResponse(message);
+                addMessage("Bot", botReply);
+            }, 1000);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        function addMessage(sender, text) {
+            let chatBody = document.getElementById("chatBody");
+            let newMessage = `<p><strong>${sender}:</strong> ${text}</p>`;
+            chatBody.innerHTML += newMessage;
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            saveMessage(sender, text);
+        }
+
+        function generateBotResponse(userMessage) {
+            const responses = {
+                "hello": "Hello! How can I assist you?",
+                "doctor availability": "Please specify the department (e.g., cardiology, orthopedics).",
+                "emergency services": "Our emergency services are available 24/7. Please call 911 for immediate assistance.",
+                "appointment booking": "You can book an appointment online or call our front desk at (123) 456-7890.",
+                "hospital location": "We are located at 123 Health St, Cityville. Do you need directions?",
+                "visiting hours": "Visiting hours are from 10 AM to 8 PM. Special permissions apply for ICU patients.",
+                "covid-19 precautions": "We follow strict COVID-19 safety measures, including mask mandates and sanitization.",
+                "contact details": "You can reach us at (123) 456-7890 or email us at support@hospital.com.",
+                "ambulance service": "Our ambulance service is available 24/7. Call (123) 456-7890 for assistance.",
+                "help": "Sure! You can ask about doctor availability, appointment booking, emergency services, and more."
+            };
+
+            let lowerMsg = userMessage.toLowerCase();
+            return responses[lowerMsg] || "I'm not sure about that. You can call our help desk at (123) 456-7890.";
+        }
+
+        function saveMessage(sender, text) {
+            let messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            messages.push({ sender, text });
+            localStorage.setItem("chatMessages", JSON.stringify(messages));
+        }
+
+        function loadMessages() {
+            let chatBody = document.getElementById("chatBody");
+            let messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            messages.forEach(msg => {
+                chatBody.innerHTML += `<p><strong>${msg.sender}:</strong> ${msg.text}</p>`;
+            });
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+    <!--=== End About Section 3===-->
+     <!--=== Footer ===-->
+ <!-- Footer Section -->
+<!-- Footer Section -->
+
+    <!--=== End Footer ===-->
+
+    <!-- Bootstrap JS and jQuery -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+    <script src="js/header.js"></script>
+
+</body>
+</html>

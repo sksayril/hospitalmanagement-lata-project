@@ -1,0 +1,45 @@
+/* ==== hospitals ==== */
+.parallax-1 {
+	background: url('/hospitals-main/hospitality/img/bg/hospital.webp') no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	top: 0;
+	padding-top: 0%;
+	opacity: .8;
+  }
+  
+  .parallax-inner {
+	padding: 10% 20%;
+	z-index: 9;
+	color: rgb(0, 0, 0);
+	font-weight: bolder;
+	font-style: italic;
+	font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  
+
+/* ============ hospital ============= */
+
+.hospital-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-title{
+	font-weight: bolder;
+	font-size: x-large;
+	font-style: italic;
+}
+
+.hospital-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.filter-bar {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
