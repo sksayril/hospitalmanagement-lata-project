@@ -77,6 +77,7 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 100%;
         }
         
         .hospital-card:hover {
@@ -91,6 +92,8 @@
         
         .card-body {
             padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
         
         .card-title {
@@ -99,14 +102,6 @@
             margin-bottom: 15px;
             border-bottom: 2px solid #e0e0e0;
             padding-bottom: 10px;
-        }
-        
-        .filter-bar {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
         }
         
         .nav-button {
@@ -202,9 +197,8 @@
         
         /* Loading animation */
         .loader {
-            display: none;
             text-align: center;
-            padding: 20px;
+            padding: 40px;
         }
         
         .loader .spinner-border {
@@ -264,11 +258,109 @@
             border-radius: 5px;
             font-weight: bold;
         }
+
+        .btn-group {
+            margin-top: auto;
+        }
         
         /* Tooltip styling */
         .tooltip-inner {
             background-color: #1e88e5;
             padding: 8px 15px;
+        }
+
+        /* Error message styling */
+        .error-container {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #fff3f3;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .error-container i {
+            font-size: 3rem;
+            color: #f44336;
+            margin-bottom: 15px;
+        }
+        
+        .error-title {
+            font-size: 1.5rem;
+            color: #f44336;
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        /* Doctor card styles in modal */
+        .doctor-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            background: white;
+            transition: transform 0.3s;
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .doctor-img {
+            height: 120px;
+            width: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 15px auto;
+            border: 3px solid #1e88e5;
+            display: block;
+        }
+        
+        .doctor-info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .doctor-name {
+            font-weight: 600;
+            color: #1e88e5;
+            margin-bottom: 5px;
+        }
+        
+        .doctor-specialty {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .book-btn {
+            width: 100%;
+            background-color: #1e88e5;
+            border: none;
+            color: white;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .book-btn:hover {
+            background-color: #1565c0;
+        }
+        
+        /* Loading spinner for doctors */
+        .doctor-loader {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .doctor-loader .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #1e88e5;
         }
     </style>
 </head>
@@ -287,9 +379,9 @@
                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="hospital.html">Hospitals</a></li>
                     <li class="nav-item"><a class="nav-link" href="doctor.html">Doctors & Specialities</a></li>
-                    <li class="nav-item"><a class="nav-link" href="department.html">Departments & Services</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="department.html">Departments & Services</a></li> -->
                     <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                    <li id="registerOption" class="nav-item"><a class="nav-link" href="register.html">Registration</a></li>
+                    <!-- <li id="registerOption" class="nav-item"><a class="nav-link" href="register.html">Registration</a></li> -->
                     <button class="nav-button animated-btn" onclick="redirectToBooking()">Book Appointment</button>
                 </ul>
                 <li id="profileNav" class="nav-item" style="display: none;">
@@ -315,19 +407,13 @@
             <p class="animate__animated animate__fadeInUp">Discover top-rated healthcare facilities near you</p>
             <div class="search-bar animate__animated animate__fadeIn animate__delay-1s">
                 <div class="row g-2">
-                    <div class="col-md-5">
+                    <div class="col-md-8">
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                             <input type="text" class="form-control" id="searchInput" placeholder="Search hospitals by name...">
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                            <input type="text" class="form-control" placeholder="Enter your location...">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
                         <button class="btn btn-primary w-100" id="searchBtn">
                             <i class="fas fa-search"></i> Search
                         </button>
@@ -340,91 +426,6 @@
     <div class="container mt-5">
         <h2 class="section-heading animate__animated animate__fadeIn">Find the Best Hospitals</h2>
         
-        <!-- Advanced Filter Bar -->
-        <div class="filter-bar mb-4 animate__animated animate__fadeIn animate__delay-1s">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label for="locationFilter" class="form-label"><i class="fas fa-map-marker-alt facility-icon"></i> Location</label>
-                    <select class="form-select" id="locationFilter">
-                        <option selected value="">All Locations</option>
-                        <option value="Katargam">Katargam</option>
-                        <option value="Piplod">Piplod</option>
-                        <option value="Kiran Motor">opp. Kiran Motor</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="ratingFilter" class="form-label"><i class="fas fa-star facility-icon"></i> Rating</label>
-                    <select class="form-select" id="ratingFilter">
-                        <option selected value="">All Ratings</option>
-                        <option value="5">5 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="3">3 Stars</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="specialtyFilter" class="form-label"><i class="fas fa-stethoscope facility-icon"></i> Specialty</label>
-                    <select class="form-select" id="specialtyFilter">
-                        <option selected value="">All Specialties</option>
-                        <option value="Cardiology">Cardiology</option>
-                        <option value="Neurology">Neurology</option>
-                        <option value="Orthopedics">Orthopedics</option>
-                        <option value="Pediatrics">Pediatrics</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="insuranceFilter" class="form-label"><i class="fas fa-heartbeat facility-icon"></i> Insurance</label>
-                    <select class="form-select" id="insuranceFilter">
-                        <option selected value="">All Types</option>
-                        <option value="Government">Government</option>
-                        <option value="Private">Private</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label d-block">&nbsp;</label>
-                    <button class="btn btn-primary w-100" id="filterBtn">
-                        <i class="fas fa-filter"></i> Apply Filters
-                    </button>
-                </div>
-            </div>
-            <div class="mt-3">
-                <button class="btn btn-outline-secondary btn-sm" id="clearFilters">
-                    <i class="fas fa-times"></i> Clear Filters
-                </button>
-                <div class="float-end">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-secondary btn-sm active" id="gridView">
-                            <i class="fas fa-th-large"></i> Grid
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" id="listView">
-                            <i class="fas fa-list"></i> List
-                        </button>
-                    </div>
-                    <select class="form-select form-select-sm d-inline-block ms-2" style="width: 120px;" id="sortOptions">
-                        <option value="relevance">Relevance</option>
-                        <option value="rating">Rating</option>
-                        <option value="name">Name (A-Z)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Active Filters Display -->
-        <div id="activeFilters" class="mb-3" style="display: none;">
-            <span class="badge bg-light text-dark me-2 p-2">All Filters: </span>
-            <span id="activeLocationFilter" class="badge bg-primary me-2 p-2" style="display: none;">
-                Location: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
-            </span>
-            <span id="activeRatingFilter" class="badge bg-primary me-2 p-2" style="display: none;">
-                Rating: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
-            </span>
-            <span id="activeSpecialtyFilter" class="badge bg-primary me-2 p-2" style="display: none;">
-                Specialty: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
-            </span>
-            <span id="activeInsuranceFilter" class="badge bg-primary me-2 p-2" style="display: none;">
-                Insurance: <span class="filter-value"></span> <i class="fas fa-times ms-1"></i>
-            </span>
-        </div>
-        
         <!-- Loading Indicator -->
         <div class="loader" id="loader">
             <div class="spinner-border" role="status">
@@ -433,119 +434,235 @@
             <p class="mt-2">Finding the best hospitals for you...</p>
         </div>
         
+        <!-- Error Message -->
+        <div class="error-container" id="errorContainer">
+            <i class="fas fa-exclamation-circle"></i>
+            <h4 class="error-title">Oops! Something went wrong</h4>
+            <p class="error-message" id="errorMessage">Unable to fetch hospital data. Please try again later.</p>
+            <button class="btn btn-outline-danger" id="retryBtn">
+                <i class="fas fa-sync-alt"></i> Retry
+            </button>
+        </div>
+        
         <!-- No Results Message -->
         <div class="no-results" id="noResults">
             <i class="fas fa-search fa-3x mb-3 text-muted"></i>
             <h4>No hospitals found</h4>
-            <p>Try adjusting your filters or search criteria</p>
+            <p>Try adjusting your search criteria</p>
             <button class="btn btn-outline-primary mt-2" id="resetSearch">Reset Search</button>
         </div>
         
         <!-- Hospital List - Grid View -->
         <div class="row" id="hospitalList">
-            <!-- Hospital Card 1 -->
-            <div class="col-md-4 hospital-item animate__animated animate__fadeIn" data-location="Katargam" data-rating="5" data-specialty="Cardiology" data-insurance="Private">
-                <div class="card hospital-card">
-                    <div class="position-relative">
-                        <img src="img/bg/bgimg1.jpg" class="card-img-top" alt="Kiran Hospital">
-                        <span class="featured-badge">Featured</span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Kiran Hospital</h5>
-                        <p class="card-text"><i class="fas fa-map-marker-alt facility-icon"></i> Vasta Devdi Rd, near Sumul Dairy Road, Tunki, Katargam, Surat, Gujarat 395004</p>
-                        <p><i class="fas fa-phone facility-icon"></i> 0261 716 1111</p>
-                        <div class="mb-3">
-                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 5.0</span>
-                            <span class="badge-availability"><i class="fas fa-clock"></i> 24/7 Emergency</span>
-                        </div>
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1"><i class="fas fa-heartbeat facility-icon"></i> Cardiology</span>
-                            <span class="badge bg-light text-dark me-1"><i class="fas fa-brain facility-icon"></i> Neurology</span>
-                            <span class="badge bg-light text-dark"><i class="fas fa-procedures facility-icon"></i> ICU</span>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <a href="kiran.html" class="btn btn-outline-primary">View Details</a>
-                            <button class="btn btn-primary" onclick="bookAppointment('Kiran Hospital')">
-                                <i class="fas fa-calendar-check"></i> Book Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Hospital Card 2 -->
-            <div class="col-md-4 hospital-item animate__animated animate__fadeIn" data-location="Piplod" data-rating="4" data-specialty="Neurology" data-insurance="Private">
-                <div class="card hospital-card">
-                    <img src="img/bg/sunshine1.jpg" class="card-img-top" alt="Sunshine Hospital">
-                    <div class="card-body">
-                        <h5 class="card-title">Sunshine Hospital</h5>
-                        <p class="card-text"><i class="fas fa-map-marker-alt facility-icon"></i> Dumas Rd, beside Big Bazar, Piplod, Surat, Gujarat 395007</p>
-                        <p><i class="fas fa-phone facility-icon"></i> 0261 411 1000</p>
-                        <div class="mb-3">
-                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 4.0</span>
-                            <span class="badge-availability"><i class="fas fa-clock"></i> 24/7 Emergency</span>
-                        </div>
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1"><i class="fas fa-brain facility-icon"></i> Neurology</span>
-                            <span class="badge bg-light text-dark me-1"><i class="fas fa-bone facility-icon"></i> Orthopedics</span>
-                            <span class="badge bg-light text-dark"><i class="fas fa-procedures facility-icon"></i> ICU</span>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <a href="sunshine.html" class="btn btn-outline-primary">View Details</a>
-                            <button class="btn btn-primary" onclick="bookAppointment('Sunshine Hospital')">
-                                <i class="fas fa-calendar-check"></i> Book Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Hospital Card 3 -->
-            <div class="col-md-4 hospital-item animate__animated animate__fadeIn" data-location="Kiran Motor" data-rating="4" data-specialty="Orthopedics" data-insurance="Government">
-                <div class="card hospital-card">
-                    <img src="img/bg/Unique.jpg" class="card-img-top" alt="Unique Hospital">
-                    <div class="card-body">
-                        <h5 class="card-title">Unique Hospital</h5>
-                        <p class="card-text"><i class="fas fa-map-marker-alt facility-icon"></i> Civil Hospital-Char Rasta Sosyo Circle, Vesu Canal Rd, opp. Kiran Motor, Surat</p>
-                        <p><i class="fas fa-phone facility-icon"></i> 0261 263 6318</p>
-                        <div class="mb-3">
-                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 4.0</span>
-                            <span class="badge-availability"><i class="fas fa-clock"></i> 24/7 Emergency</span>
-                        </div>
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1"><i class="fas fa-bone facility-icon"></i> Orthopedics</span>
-                            <span class="badge bg-light text-dark me-1"><i class="fas fa-baby facility-icon"></i> Pediatrics</span>
-                            <span class="badge bg-light text-dark"><i class="fas fa-procedures facility-icon"></i> ICU</span>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <a href="unique.html" class="btn btn-outline-primary">View Details</a>
-                            <button class="btn btn-primary" onclick="bookAppointment('Unique Hospital')">
-                                <i class="fas fa-calendar-check"></i> Book Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Hospital cards will be dynamically generated here -->
         </div>
         
         <!-- Pagination -->
         <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </li>
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination will be dynamically generated here -->
             </ul>
         </nav>
+    </div>
+    <!-- Add these new modals after the existing doctorsModal -->
+
+<!-- Available Slots Modal -->
+<div class="modal fade" id="slotsModal" tabindex="-1" aria-labelledby="slotsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="slotsModalLabel">Available Slots</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Slots loading spinner -->
+                <div class="slot-loader" id="slotLoader">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading slots...</span>
+                    </div>
+                    <p class="mt-2">Finding available slots...</p>
+                </div>
+                
+                <!-- Error message for slots -->
+                <div class="alert alert-danger" id="slotError" style="display: none;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="slotErrorMessage">Unable to fetch available slots.</span>
+                </div>
+                
+                <!-- No slots message -->
+                <div class="alert alert-info" id="noSlots" style="display: none;">
+                    <i class="fas fa-info-circle me-2"></i>
+                    No slots are currently available for this doctor.
+                </div>
+                
+                <!-- Slots list -->
+                <div id="slotsList">
+                    <!-- Slots will be dynamically generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Patient Form Modal -->
+<div class="modal fade" id="patientFormModal" tabindex="-1" aria-labelledby="patientFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="patientFormModalLabel">Patient Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="patientForm">
+                    <div class="mb-3">
+                        <label for="patientName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="patientName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactNumber" class="form-label">Contact Number</label>
+                        <input type="tel" class="form-control" id="contactNumber" pattern="[0-9]{10}" required>
+                        <small class="text-muted">Enter a 10-digit phone number</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="diagnosis" class="form-label">Reason for Visit</label>
+                        <textarea class="form-control" id="diagnosis" rows="3" required></textarea>
+                    </div>
+                    <!-- Hidden fields for IDs -->
+                    <input type="hidden" id="formDoctorId">
+                    <input type="hidden" id="formHospitalId">
+                    <input type="hidden" id="formSlotId">
+                    <input type="hidden" id="formSlotDate">
+                    <input type="hidden" id="formSlotTime">
+                </form>
+                <!-- Success message -->
+                <div class="alert alert-success mt-3" id="bookingSuccess" style="display: none;">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span id="bookingSuccessMessage">Appointment booked successfully!</span>
+                </div>
+                <!-- Error message -->
+                <div class="alert alert-danger mt-3" id="bookingError" style="display: none;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="bookingErrorMessage">Unable to book appointment.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitPatientForm">Book Appointment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add these styles to the existing <style> section -->
+<style>
+    /* Slots styling */
+    .date-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .date-header {
+        font-weight: 600;
+        color: #1e88e5;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .slot-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .slot-item {
+        background-color: #e3f2fd;
+        border: 1px solid #1e88e5;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .slot-item:hover {
+        background-color: #1e88e5;
+        color: white;
+        transform: scale(1.05);
+    }
+    
+    .slot-item.selected {
+        background-color: #1e88e5;
+        color: white;
+        font-weight: bold;
+    }
+    
+    .slot-time {
+        font-weight: 600;
+    }
+    
+    /* Patient form styles */
+    #patientForm label {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .slot-loader {
+        text-align: center;
+        padding: 40px;
+    }
+    
+    .slot-loader .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        color: #1e88e5;
+    }
+</style>
+    <!-- Doctors Modal -->
+    <div class="modal fade" id="doctorsModal" tabindex="-1" aria-labelledby="doctorsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="doctorsModalLabel">Available Doctors</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Doctor loading spinner -->
+                    <div class="doctor-loader" id="doctorLoader">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading doctors...</span>
+                        </div>
+                        <p class="mt-2">Finding available doctors...</p>
+                    </div>
+                    
+                    <!-- Error message for doctors -->
+                    <div class="alert alert-danger" id="doctorError" style="display: none;">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="doctorErrorMessage">Unable to fetch doctor data.</span>
+                    </div>
+                    
+                    <!-- No doctors message -->
+                    <div class="alert alert-info" id="noDoctors" style="display: none;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No doctors are currently available at this hospital.
+                    </div>
+                    
+                    <!-- Doctors list -->
+                    <div class="row" id="doctorsList">
+                        <!-- Doctor cards will be dynamically generated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Featured Hospitals Section with Carousel -->
@@ -554,82 +671,7 @@
             <h2 class="featured-heading section-heading mb-4">Featured Hospitals</h2>
             
             <div class="owl-carousel owl-theme" id="featuredHospitals">
-                <div class="item">
-                    <div class="card hospital-card h-100">
-                        <img src="img/bg/bgimg1.jpg" class="card-img-top" alt="Kiran Hospital">
-                        <div class="card-body">
-                            <h5 class="card-title">Kiran Hospital</h5>
-                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> Katargam, Surat</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <span class="ms-2">(520 reviews)</span>
-                            </div>
-                            <p class="text-muted">Multi-specialty hospital with state-of-the-art facilities</p>
-                            <a href="kiran.html" class="btn btn-sm btn-outline-primary">View Hospital</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="card hospital-card h-100">
-                        <img src="img/bg/sunshine1.jpg" class="card-img-top" alt="Sunshine Hospital">
-                        <div class="card-body">
-                            <h5 class="card-title">Sunshine Hospital</h5>
-                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> Piplod, Surat</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star-half-alt text-warning"></i>
-                                <span class="ms-2">(410 reviews)</span>
-                            </div>
-                            <p class="text-muted">Premier healthcare facility with expert doctors</p>
-                            <a href="sunshine.html" class="btn btn-sm btn-outline-primary">View Hospital</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="card hospital-card h-100">
-                        <img src="img/bg/Unique.jpg" class="card-img-top" alt="Unique Hospital">
-                        <div class="card-body">
-                            <h5 class="card-title">Unique Hospital</h5>
-                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> opp. Kiran Motor, Surat</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="far fa-star text-warning"></i>
-                                <span class="ms-2">(320 reviews)</span>
-                            </div>
-                            <p class="text-muted">Renowned for orthopedic and pediatric care</p>
-                            <a href="unique.html" class="btn btn-sm btn-outline-primary">View Hospital</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="card hospital-card h-100">
-                        <img src="img/bg/hospital4.jpg" class="card-img-top" alt="SMIMER Hospital">
-                        <div class="card-body">
-                            <h5 class="card-title">SMIMER Hospital</h5>
-                            <p class="mb-2"><i class="fas fa-map-marker-alt facility-icon"></i> Umarwada, Surat</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="far fa-star text-warning"></i>
-                                <span class="ms-2">(275 reviews)</span>
-                            </div>
-                            <p class="text-muted">Government hospital with affordable quality care</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">View Hospital</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Featured hospitals will be dynamically generated here -->
             </div>
         </div>
     </section>
@@ -692,6 +734,7 @@
             </div>
         </div>
     </section>
+
 
     <!--=== Footer ===-->
     <div class="footer-v1">
@@ -785,280 +828,627 @@
     <!-- Custom JavaScript -->
     <script src="js/header.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize tooltips
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-            
-            // Initialize Owl Carousel for featured hospitals
-            $("#featuredHospitals").owlCarousel({
-                loop: true,
-                margin: 20,
-                nav: true,
-                responsive: {
-                    0: { items: 1 },
-                    600: { items: 2 },
-                    1000: { items: 3 }
-                },
-                autoplay: true,
-                autoplayTimeout: 5000,
-                autoplayHoverPause: true,
-                navText: [
-                    "<i class='fas fa-chevron-left'></i>",
-                    "<i class='fas fa-chevron-right'></i>"
-                ]
+        $(document).ready(function () {
+    const HOSPITAL_API_URL = "https://7cvccltb-3100.inc1.devtunnels.ms/api/get-all-hospital";
+    const DOCTORS_API_URL = "http://localhost:3100/api/get-all-doctors-byhospital";
+    const SLOTS_API_URL = "https://7cvccltb-3100.inc1.devtunnels.ms/api/get-all-slots";
+    const BOOKING_API_URL = "https://7cvccltb-3100.inc1.devtunnels.ms/api/patients/add";
+    
+    let allHospitals = [];
+    let filteredHospitals = [];
+    let currentPage = 1;
+    const itemsPerPage = 6;
+    
+    // Initialize modals
+    const doctorsModal = new bootstrap.Modal(document.getElementById('doctorsModal'));
+    const slotsModal = new bootstrap.Modal(document.getElementById('slotsModal'));
+    const patientFormModal = new bootstrap.Modal(document.getElementById('patientFormModal'));
+    
+    // Store selected information
+    let selectedHospitalId = '';
+    let selectedHospitalName = '';
+    let selectedDoctorId = '';
+    let selectedDoctorName = '';
+
+    // Fetch hospitals
+    fetchHospitals();
+
+    function fetchHospitals() {
+        showLoader();
+
+        $.ajax({
+            url: HOSPITAL_API_URL,
+            method: 'GET',
+            success: function (response) {
+                hideLoader();
+                allHospitals = response;
+                filteredHospitals = [...allHospitals];
+                displayHospitals(filteredHospitals);
+                initFeaturedHospitals(allHospitals);
+            },
+            error: function (err) {
+                hideLoader();
+                showError("Unable to fetch hospital data. Please try again later.");
+                console.error("Error:", err);
+            }
+        });
+    }
+
+    function displayHospitals(hospitals) {
+        const hospitalList = document.getElementById('hospitalList');
+        hospitalList.innerHTML = '';
+
+        if (hospitals.length === 0) {
+            document.getElementById('noResults').style.display = 'block';
+            document.getElementById('pagination').style.display = 'none';
+            return;
+        } else {
+            document.getElementById('noResults').style.display = 'none';
+            document.getElementById('pagination').style.display = 'flex';
+        }
+
+        const totalPages = Math.ceil(hospitals.length / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedHospitals = hospitals.slice(startIndex, endIndex);
+
+        paginatedHospitals.forEach(hospital => {
+            const card = document.createElement('div');
+            card.className = 'col-md-4 mb-4';
+            card.innerHTML = `
+                <div class="card hospital-card">
+                    <img src="${hospital.imageUrl || 'img/default-hospital.jpg'}" class="card-img-top" alt="${hospital.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${hospital.name}</h5>
+                        <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>${hospital.address}</p>
+                        <span class="badge-rating"><i class="fas fa-star text-warning"></i> 5.0</span>
+                        <div class="mt-auto pt-3">
+                            <button class="btn btn-primary w-100 book-btn" data-hospital-id="${hospital._id}" data-hospital-name="${hospital.name}">
+                                <i class="fas fa-calendar-check me-2"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            hospitalList.appendChild(card);
+        });
+        
+        // Add event listeners to book buttons
+        document.querySelectorAll('.book-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const hospitalId = this.getAttribute('data-hospital-id');
+                const hospitalName = this.getAttribute('data-hospital-name');
+                openDoctorsModal(hospitalId, hospitalName);
             });
-            
-            // Animated entrance for hospital cards
-            setTimeout(function() {
-                $('.hospital-item').addClass('animate__fadeIn');
-            }, 300);
-            
-            // Filter functionality
-            $("#filterBtn").click(function() {
-                simulateLoading();
+        });
+        
+        renderPagination(totalPages);
+    }
+
+    function openDoctorsModal(hospitalId, hospitalName) {
+        // Store selected hospital info
+        selectedHospitalId = hospitalId;
+        selectedHospitalName = hospitalName;
+        
+        // Reset modal content
+        document.getElementById('doctorsModalLabel').textContent = `Available Doctors at ${hospitalName}`;
+        document.getElementById('doctorsList').innerHTML = '';
+        document.getElementById('doctorLoader').style.display = 'block';
+        document.getElementById('doctorError').style.display = 'none';
+        document.getElementById('noDoctors').style.display = 'none';
+        
+        // Show the modal
+        doctorsModal.show();
+        
+        // Fetch doctors for this hospital
+        $.ajax({
+            url: `${DOCTORS_API_URL}/${hospitalId}`,
+            method: 'GET',
+            success: function(response) {
+                document.getElementById('doctorLoader').style.display = 'none';
                 
-                // Get filter values
-                const locationFilter = $("#locationFilter").val();
-                const ratingFilter = $("#ratingFilter").val();
-                const specialtyFilter = $("#specialtyFilter").val();
-                const insuranceFilter = $("#insuranceFilter").val();
-                
-                // Show active filters
-                if (locationFilter || ratingFilter || specialtyFilter || insuranceFilter) {
-                    $("#activeFilters").show();
-                } else {
-                    $("#activeFilters").hide();
+                // Handle the new response structure
+                if (!response.data || !response.data[0].doctors || response.data[0].doctors.length === 0) {
+                    document.getElementById('noDoctors').style.display = 'block';
+                    return;
                 }
                 
-                // Set active filter badges
-                if (locationFilter) {
-                    $("#activeLocationFilter").show().find(".filter-value").text(locationFilter);
-                } else {
-                    $("#activeLocationFilter").hide();
-                }
+                const doctorsList = document.getElementById('doctorsList');
+                const doctors = response.data[0].doctors;
                 
-                if (ratingFilter) {
-                    $("#activeRatingFilter").show().find(".filter-value").text(ratingFilter + " Stars");
-                } else {
-                    $("#activeRatingFilter").hide();
-                }
-                
-                if (specialtyFilter) {
-                    $("#activeSpecialtyFilter").show().find(".filter-value").text(specialtyFilter);
-                } else {
-                    $("#activeSpecialtyFilter").hide();
-                }
-                
-                if (insuranceFilter) {
-                    $("#activeInsuranceFilter").show().find(".filter-value").text(insuranceFilter);
-                } else {
-                    $("#activeInsuranceFilter").hide();
-                }
-                
-                // Filter hospitals based on criteria
-                $(".hospital-item").each(function() {
-                    let show = true;
-                    
-                    if (locationFilter && $(this).data("location") !== locationFilter) {
-                        show = false;
-                    }
-                    
-                    if (ratingFilter && $(this).data("rating") !== parseInt(ratingFilter)) {
-                        show = false;
-                    }
-                    
-                    if (specialtyFilter && $(this).data("specialty") !== specialtyFilter) {
-                        show = false;
-                    }
-                    
-                    if (insuranceFilter && $(this).data("insurance") !== insuranceFilter) {
-                        show = false;
-                    }
-                    
-                    if (show) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
+                doctors.forEach(doctor => {
+                    const doctorCard = document.createElement('div');
+                    doctorCard.className = 'col-md-4 mb-3';
+                    doctorCard.innerHTML = `
+                        <div class="doctor-card">
+                            <img src="${doctor.doctorImage || 'img/default-doctor.jpg'}" class="doctor-img" alt="${doctor.doctorName}">
+                            <div class="doctor-info">
+                                <h5 class="doctor-name">${doctor.doctorName}</h5>
+                                <p class="doctor-specialty">${doctor.specialization}</p>
+                                <p class="doctor-experience"><i class="fas fa-briefcase me-1"></i> ${doctor.experience} years</p>
+                                <button class="btn book-btn" data-doctor-id="${doctor.doctorId}" data-doctor-name="${doctor.doctorName}" data-toggle="tooltip" title="Book appointment with Dr. ${doctor.doctorName}">
+                                    Book Appointment
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    doctorsList.appendChild(doctorCard);
                 });
                 
-                // Check if any hospitals are visible
-                setTimeout(function() {
-                    if ($(".hospital-item:visible").length === 0) {
-                        $("#noResults").show();
-                    } else {
-                        $("#noResults").hide();
-                    }
-                }, 1000);
-            });
-            
-            // Clear filters
-            $("#clearFilters, #resetSearch").click(function() {
-                simulateLoading();
+                // Initialize tooltips
+                $('[data-toggle="tooltip"]').tooltip();
                 
-                // Reset filter selects
-                $("#locationFilter").val("");
-                $("#ratingFilter").val("");
-                $("#specialtyFilter").val("");
-                $("#insuranceFilter").val("");
-                
-                // Hide active filters
-                $("#activeFilters").hide();
-                
-                // Show all hospitals
-                $(".hospital-item").show();
-                $("#noResults").hide();
-            });
-            
-            // Search functionality
-            $("#searchBtn").click(function() {
-                simulateLoading();
-                
-                const searchTerm = $("#searchInput").val().toLowerCase();
-                if (searchTerm) {
-                    $(".hospital-item").each(function() {
-                        const hospitalName = $(this).find(".card-title").text().toLowerCase();
-                        const hospitalAddress = $(this).find(".card-text").text().toLowerCase();
+                // Add event listeners to book buttons
+                document.querySelectorAll('#doctorsList .book-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const doctorId = this.getAttribute('data-doctor-id');
+                        const doctorName = this.getAttribute('data-doctor-name');
                         
-                        if (hospitalName.includes(searchTerm) || hospitalAddress.includes(searchTerm)) {
-                            $(this).show();
-                        } else {
-                            $(this).hide();
-                        }
+                        // Close the doctors modal
+                        doctorsModal.hide();
+                        
+                        // Open the slots modal
+                        openSlotsModal(doctorId, doctorName);
+                    });
+                });
+            },
+            error: function(err) {
+                document.getElementById('doctorLoader').style.display = 'none';
+                document.getElementById('doctorError').style.display = 'block';
+                document.getElementById('doctorErrorMessage').textContent = 'Unable to fetch doctor data. Please try again later.';
+                console.error("Error:", err);
+            }
+        });
+    }
+
+    // Function to open the slots modal and fetch available slots
+    function openSlotsModal(doctorId, doctorName) {
+        // Store selected doctor info
+        selectedDoctorId = doctorId;
+        selectedDoctorName = doctorName;
+        
+        // Reset modal content
+        document.getElementById('slotsModalLabel').textContent = `Available Slots for Dr. ${doctorName}`;
+        document.getElementById('slotsList').innerHTML = '';
+        document.getElementById('slotLoader').style.display = 'block';
+        document.getElementById('slotError').style.display = 'none';
+        document.getElementById('noSlots').style.display = 'none';
+        
+        // Show the modal
+        slotsModal.show();
+        
+        // Fetch available slots for this doctor
+        $.ajax({
+            url: `${SLOTS_API_URL}/${doctorId}`,
+            method: 'GET',
+            success: function(response) {
+                document.getElementById('slotLoader').style.display = 'none';
+                
+                // Check if slots exist
+                if (!response.slots || response.slots.length === 0) {
+                    document.getElementById('noSlots').style.display = 'block';
+                    return;
+                }
+                
+                const slotsList = document.getElementById('slotsList');
+                const slots = response.slots;
+                
+                // Group slots by date
+                const slotsByDate = {};
+                slots.forEach(slot => {
+                    if (!slotsByDate[slot.date]) {
+                        slotsByDate[slot.date] = [];
+                    }
+                    slotsByDate[slot.date].push(slot);
+                });
+                
+                // Display slots grouped by date
+                for (const [date, dateSlots] of Object.entries(slotsByDate)) {
+                    const dateCard = document.createElement('div');
+                    dateCard.className = 'date-card';
+                    
+                    // Format date for display (assuming date is in YYYY-MM-DD format)
+                    const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                     });
                     
-                    // Check if any hospitals are visible
-                    setTimeout(function() {
-                        if ($(".hospital-item:visible").length === 0) {
-                            $("#noResults").show();
-                        } else {
-                            $("#noResults").hide();
-                        }
-                    }, 1000);
-                } else {
-                    $(".hospital-item").show();
-                    $("#noResults").hide();
+                    dateCard.innerHTML = `
+                        <h5 class="date-header">${formattedDate}</h5>
+                        <div class="slot-grid" data-date="${date}">
+                            <!-- Slots will be added here -->
+                        </div>
+                    `;
+                    
+                    slotsList.appendChild(dateCard);
+                    const slotGrid = dateCard.querySelector('.slot-grid');
+                    
+                    // Add all time slots for this date
+                    dateSlots.forEach(dateSlot => {
+                        // Extract all slots from the dateSlot
+                        dateSlot.slots.forEach(timeSlot => {
+                            const slotItem = document.createElement('div');
+                            slotItem.className = 'slot-item';
+                            slotItem.setAttribute('data-slot-id', dateSlot._id);
+                            slotItem.setAttribute('data-time-id', timeSlot._id);
+                            slotItem.setAttribute('data-date', date);
+                            slotItem.setAttribute('data-time', `${timeSlot.startTime} - ${timeSlot.endTime}`);
+                            
+                            slotItem.innerHTML = `
+                                <div class="slot-time">${timeSlot.startTime} - ${timeSlot.endTime}</div>
+                            `;
+                            
+                            slotGrid.appendChild(slotItem);
+                            
+                            // Add click event listener to select a slot
+                            slotItem.addEventListener('click', function() {
+                                // Remove selected class from all slots
+                                document.querySelectorAll('.slot-item').forEach(item => {
+                                    item.classList.remove('selected');
+                                });
+                                
+                                // Add selected class to this slot
+                                this.classList.add('selected');
+                                
+                                // Show patient form modal
+                                openPatientFormModal(
+                                    this.getAttribute('data-slot-id'), 
+                                    this.getAttribute('data-time-id'),
+                                    this.getAttribute('data-date'),
+                                    this.getAttribute('data-time')
+                                );
+                            });
+                        });
+                    });
                 }
-            });
-            
-            // Remove individual filters when clicking on the X
-            $("#activeLocationFilter .fa-times").click(function() {
-                $("#locationFilter").val("");
-                $("#activeLocationFilter").hide();
-                applyFilters();
-            });
-            
-            $("#activeRatingFilter .fa-times").click(function() {
-                $("#ratingFilter").val("");
-                $("#activeRatingFilter").hide();
-                applyFilters();
-            });
-            
-            $("#activeSpecialtyFilter .fa-times").click(function() {
-                $("#specialtyFilter").val("");
-                $("#activeSpecialtyFilter").hide();
-                applyFilters();
-            });
-            
-            $("#activeInsuranceFilter .fa-times").click(function() {
-                $("#insuranceFilter").val("");
-                $("#activeInsuranceFilter").hide();
-                applyFilters();
-            });
-            
-            // Toggle between grid and list view
-            $("#gridView").click(function() {
-                $(this).addClass("active");
-                $("#listView").removeClass("active");
-                $(".hospital-item").removeClass("col-md-12").addClass("col-md-4");
-            });
-            
-            $("#listView").click(function() {
-                $(this).addClass("active");
-                $("#gridView").removeClass("active");
-                $(".hospital-item").removeClass("col-md-4").addClass("col-md-12");
-            });
-            
-            // Book appointment functionality
-            window.bookAppointment = function(hospitalName) {
-                alert("Booking appointment at " + hospitalName + ". Redirecting to appointment page...");
-                // Redirect to booking page
-                // window.location.href = "book.html?hospital=" + encodeURIComponent(hospitalName);
-            };
-            
-            // Function to simulate loading
-            function simulateLoading() {
-                // Hide content and show loader
-                $("#hospitalList").hide();
-                $("#loader").show();
-                
-                // After timeout, hide loader and show content
-                setTimeout(function() {
-                    $("#loader").hide();
-                    $("#hospitalList").show();
-                }, 1000);
+            },
+            error: function(err) {
+                document.getElementById('slotLoader').style.display = 'none';
+                document.getElementById('slotError').style.display = 'block';
+                document.getElementById('slotErrorMessage').textContent = 'Unable to fetch available slots. Please try again later.';
+                console.error("Error:", err);
             }
-            
-            // Function to apply filters (used by individual filter removal)
-            function applyFilters() {
-                $("#filterBtn").click();
-            }
-            
-            // Sort functionality
-            $("#sortOptions").change(function() {
-                const sortBy = $(this).val();
-                
-                if (sortBy === "rating") {
-                    // Sort by rating (highest first)
-                    const items = $(".hospital-item").get();
-                    items.sort(function(a, b) {
-                        const ratingA = $(a).data("rating");
-                        const ratingB = $(b).data("rating");
-                        return ratingB - ratingA;
-                    });
-                    $("#hospitalList").append(items);
-                } else if (sortBy === "name") {
-                    // Sort by name (A-Z)
-                    const items = $(".hospital-item").get();
-                    items.sort(function(a, b) {
-                        const nameA = $(a).find(".card-title").text().toLowerCase();
-                        const nameB = $(b).find(".card-title").text().toLowerCase();
-                        if (nameA < nameB) return -1;
-                        if (nameA > nameB) return 1;
-                        return 0;
-                    });
-                    $("#hospitalList").append(items);
-                } else {
-                    // Sort by relevance (default order)
-                    const items = $(".hospital-item").get();
-                    items.sort(function(a, b) {
-                        return $(a).index() - $(b).index();
-                    });
-                    $("#hospitalList").append(items);
-                }
-            });
-            
-            // Back to top button functionality
-            $(window).scroll(function() {
-                if ($(this).scrollTop() > 300) {
-                    $('.back-to-top').fadeIn();
-                } else {
-                    $('.back-to-top').fadeOut();
-                }
-            });
-            
-            $('.back-to-top').click(function(e) {
-                e.preventDefault();
-                $('html, body').animate({scrollTop: 0}, 800);
-                return false;
-            });
-            
-            // Redirect to booking page
-            window.redirectToBooking = function() {
-                window.location.href = "book.html";
-            };
         });
-    </script>
-</body>
-</html>
+    }
+
+    // Function to open the patient form modal
+    function openPatientFormModal(slotId, timeSlotId, date, time) {
+        // Close the slots modal
+        slotsModal.hide();
+        
+        // Reset form and messages
+        document.getElementById('patientForm').reset();
+        document.getElementById('bookingSuccess').style.display = 'none';
+        document.getElementById('bookingError').style.display = 'none';
+        
+        // Set hidden form values
+        document.getElementById('formDoctorId').value = selectedDoctorId;
+        document.getElementById('formHospitalId').value = selectedHospitalId;
+        document.getElementById('formSlotId').value = timeSlotId;
+        document.getElementById('formSlotDate').value = date;
+        document.getElementById('formSlotTime').value = time;
+        
+        // Update modal title
+        document.getElementById('patientFormModalLabel').textContent = `Book Appointment with Dr. ${selectedDoctorName}`;
+        
+        // Show additional appointment details
+        const formattedDate = new Date(date).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Show the modal
+        patientFormModal.show();
+    }
+
+    // Handle patient form submission
+    document.getElementById('submitPatientForm').addEventListener('click', function() {
+        const form = document.getElementById('patientForm');
+        
+        // Check form validity
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        
+        // Get form data
+        const bookingData = {
+            name: document.getElementById('patientName').value,
+            contactNumber: document.getElementById('contactNumber').value,
+            diagnosis: document.getElementById('diagnosis').value,
+            doctorId: document.getElementById('formDoctorId').value,
+            hospitalId: document.getElementById('formHospitalId').value,
+            slotId: document.getElementById('formSlotId').value
+        };
+        
+        // Disable submit button and show loading
+        const submitBtn = document.getElementById('submitPatientForm');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Booking...';
+        
+        // Submit booking data
+        $.ajax({
+            url: BOOKING_API_URL,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(bookingData),
+            success: function(response) {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                
+                // Show success message
+                document.getElementById('bookingSuccess').style.display = 'block';
+                document.getElementById('bookingSuccessMessage').textContent = 'Appointment booked successfully!';
+                
+                // Hide form elements
+                form.style.display = 'none';
+                
+                // Add confirmation details to success message
+                const successMessageElement = document.getElementById('bookingSuccessMessage');
+                const formattedDate = new Date(document.getElementById('formSlotDate').value).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                successMessageElement.innerHTML = `
+                    Appointment booked successfully!<br><br>
+                    <strong>Doctor:</strong> Dr. ${selectedDoctorName}<br>
+                    <strong>Hospital:</strong> ${selectedHospitalName}<br>
+                    <strong>Date:</strong> ${formattedDate}<br>
+                    <strong>Time:</strong> ${document.getElementById('formSlotTime').value}<br><br>
+                    Please arrive 15 minutes before your scheduled appointment.
+                `;
+                
+                // Change the close button text
+                document.querySelector('.modal-footer .btn-secondary').textContent = 'Close';
+                
+                // Hide the submit button
+                document.getElementById('submitPatientForm').style.display = 'none';
+            },
+            error: function(err) {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                
+                // Show error message
+                document.getElementById('bookingError').style.display = 'block';
+                document.getElementById('bookingErrorMessage').textContent = 'Unable to book appointment. Please try again later.';
+                console.error("Error:", err);
+            }
+        });
+    });
+
+    function renderPagination(totalPages) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        
+        // Previous button
+        const prevLi = document.createElement('li');
+        prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>`;
+        pagination.appendChild(prevLi);
+        
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            pagination.appendChild(li);
+        }
+        
+        // Next button
+        const nextLi = document.createElement('li');
+        nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+        nextLi.innerHTML = `<a class="page-link" href="#" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>`;
+        pagination.appendChild(nextLi);
+        
+        // Add event listeners
+        document.querySelectorAll('.page-link').forEach((link, index) => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (index === 0) {
+                    // Previous button
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayHospitals(filteredHospitals);
+                    }
+                } else if (index === totalPages + 1) {
+                    // Next button
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        displayHospitals(filteredHospitals);
+                    }
+                } else {
+                    // Page number
+                    currentPage = index;
+                    displayHospitals(filteredHospitals);
+                }
+                
+                // Scroll to top of hospital list
+                document.getElementById('hospitalList').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    }
+
+    function initFeaturedHospitals(hospitals) {
+        // Get top 5 hospitals with highest ratings (or just first 5 if ratings not available)
+        const featuredHospitals = hospitals.slice(0, 5);
+        const carousel = $('#featuredHospitals');
+        
+        featuredHospitals.forEach(hospital => {
+            const slide = `
+                <div class="item">
+                    <div class="card hospital-card">
+                        <span class="featured-badge"><i class="fas fa-award"></i> Featured</span>
+                        <img src="${hospital.imageUrl || 'img/default-hospital.jpg'}" class="card-img-top" alt="${hospital.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${hospital.name}</h5>
+                            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>${hospital.address}</p>
+                            <span class="badge-rating"><i class="fas fa-star text-warning"></i> 5.0</span>
+                            <div class="mt-auto pt-3">
+                                <button class="btn btn-primary w-100 book-btn" data-hospital-id="${hospital._id}" data-hospital-name="${hospital.name}">
+                                    <i class="fas fa-calendar-check me-2"></i> Book Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            carousel.append(slide);
+        });
+        
+        // Initialize Owl Carousel
+        carousel.owlCarousel({
+            loop: true,
+            margin: 20,
+            nav: true,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            autoplayHoverPause: true,
+            navText: [
+                '<i class="fas fa-chevron-left"></i>',
+                '<i class="fas fa-chevron-right"></i>'
+            ],
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                }
+            }
+        });
+        
+        // Add event listeners to book buttons in carousel
+        carousel.find('.book-btn').each(function() {
+            $(this).on('click', function() {
+                const hospitalId = $(this).data('hospital-id');
+                const hospitalName = $(this).data('hospital-name');
+                openDoctorsModal(hospitalId, hospitalName);
+            });
+        });
+    }
+
+    function showLoader() {
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('hospitalList').innerHTML = '';
+        document.getElementById('pagination').style.display = 'none';
+        document.getElementById('errorContainer').style.display = 'none';
+        document.getElementById('noResults').style.display = 'none';
+    }
+
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function showError(message) {
+        document.getElementById('errorContainer').style.display = 'block';
+        document.getElementById('errorMessage').textContent = message;
+    }
+
+    // Search functionality
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            filteredHospitals = [...allHospitals];
+        } else {
+            filteredHospitals = allHospitals.filter(hospital => 
+                hospital.name.toLowerCase().includes(searchTerm) || 
+                hospital.address.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        currentPage = 1;
+        displayHospitals(filteredHospitals);
+    });
+
+    // Search input enter key press
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('searchBtn').click();
+        }
+    });
+
+    // Reset search
+    document.getElementById('resetSearch').addEventListener('click', function() {
+        document.getElementById('searchInput').value = '';
+        filteredHospitals = [...allHospitals];
+        currentPage = 1;
+        displayHospitals(filteredHospitals);
+    });
+
+    // Retry button
+    document.getElementById('retryBtn').addEventListener('click', function() {
+        fetchHospitals();
+    });
+
+    // Redirect to booking page
+    function redirectToBooking() {
+        window.location.href = 'book.html';
+    }
+
+    // Back to top button
+    const backToTopButton = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+
+    backToTopButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Initialize tooltips
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    // Check user login status
+    
+// Check user login status
+function checkLoginStatus() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    
+    if (userData && userData.token) {
+        // User is logged in
+        document.getElementById('registerOption').style.display = 'none';
+        document.getElementById('profileNav').style.display = 'block';
+        
+        // Set profile initial
+        if (userData.name) {
+            document.getElementById('profileInitial').textContent = userData.name.charAt(0).toUpperCase();
+            document.getElementById('profileInitial').style.display = 'block';
+        }
+    } else {
+        // User is not logged in
+        document.getElementById('registerOption').style.display = 'block';
+        document.getElementById('profileNav').style.display = 'none';
+    }
+}
+
+        });
+        </script>
